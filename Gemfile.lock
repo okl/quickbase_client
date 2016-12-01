@@ -1,0 +1,20 @@
+PATH
+  remote: .
+  specs:
+    quickbase_client (1.0.30)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    rake (11.0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler (~> 1.6)
+  quickbase_client!
+  rake
+
+BUNDLED WITH
+   1.10.6
