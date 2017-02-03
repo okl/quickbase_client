@@ -22,7 +22,7 @@ begin
   USING_HTTPCLIENT = true
 rescue LoadError
   USING_HTTPCLIENT = false
-end  
+end
 
 module QuickBase
 
@@ -35,13 +35,13 @@ module QuickBase
 # response into member variables.
 class Client
 
-   attr_reader :access, :accessid, :accountLimit, :accountUsage, :action, :admin 
-   attr_reader :adminOnly, :ancestorappid, :app, :appdbid, :appdata, :applicationLimit, :applicationUsage, :apptoken, :authenticationXML 
-   attr_reader :cacheSchemas, :cachedSchemas, :chdbids, :choice, :clist, :copyfid, :create, :createapptoken, :createdTime 
+   attr_reader :access, :accessid, :accountLimit, :accountUsage, :action, :admin
+   attr_reader :adminOnly, :ancestorappid, :app, :appdbid, :appdata, :applicationLimit, :applicationUsage, :apptoken, :authenticationXML
+   attr_reader :cacheSchemas, :cachedSchemas, :chdbids, :choice, :clist, :copyfid, :create, :createapptoken, :createdTime
    attr_reader :databases, :dbdesc, :dbid, :dbidForRequestURL, :dbname, :delete, :destrid, :dfid, :disprec, :domain, :downLoadFileURL
    attr_reader :email, :errcode, :errdetail, :errtext, :excludeparents, :externalAuth, :fform
    attr_reader :fid, :fids, :field, :fields, :field_data, :field_data_list, :fieldTypeLabelMap, :fieldValue, :fileContents, :fileUploadToken, :firstName, :fmt, :fname, :fnames, :fvlist
-   attr_reader :hours, :HTML, :httpConnection, :id, :ignoreError, :includeancestors 
+   attr_reader :hours, :HTML, :httpConnection, :id, :ignoreError, :includeancestors
    attr_reader :jht, :jsa, :key_fid, :key, :keepData, :label, :lastAccessTime
    attr_reader :lastError, :lastModifiedTime, :lastName, :lastPaymentDate, :lastRecModTime, :login
    attr_reader :mgrID, :mgrName, :mode, :modify, :name
@@ -54,20 +54,20 @@ class Client
    attr_reader :qid, :qname, :queries, :query, :record, :records, :records_csv, :recurse, :relfids
    attr_reader :requestHeaders, :requestNextAllowedTime, :requestSucceeded, :requestTime, :requestURL, :requestXML
    attr_reader :responseElement, :responseElementText, :responseElements, :responseXML
-   attr_reader :responseXMLdoc, :rid, :rids, :role, :roleid, :rolename, :roles, :saveviews, :screenName 
-   attr_reader :serverStatus, :serverVersion ,  :serverUsers,  :serverGroups, :serverDatabases, :serverUptime, :serverUpdays 
+   attr_reader :responseXMLdoc, :rid, :rids, :role, :roleid, :rolename, :roles, :saveviews, :screenName
+   attr_reader :serverStatus, :serverVersion ,  :serverUsers,  :serverGroups, :serverDatabases, :serverUptime, :serverUpdays
    attr_reader :showAppData, :skipfirst, :slist, :sourcerid, :standardRequestHeaders, :status, :stopOnError
-   attr_reader :table, :tables, :ticket, :type, :udata, :uname, :update_id, :user, :userid  
+   attr_reader :table, :tables, :ticket, :type, :udata, :uname, :update_id, :user, :userid
    attr_reader :username, :users, :value, :validFieldProperties, :validFieldTypes, :variables , :usertoken
    attr_reader :varname, :version, :vid, :view, :withembeddedtables
    attr_reader :eventSubscribers, :logger
 
-   attr_writer :cacheSchemas, :apptoken, :escapeBR, :fvlist, :httpConnection, :ignoreCR, :ignoreLF, :ignoreTAB 
+   attr_writer :cacheSchemas, :apptoken, :escapeBR, :fvlist, :httpConnection, :ignoreCR, :ignoreLF, :ignoreTAB
    attr_writer :printRequestsAndResponses, :qbhost, :stopOnError, :ticket, :udata, :rdr, :xsl, :encoding
 
 =begin rdoc
  'Plumbing' methods:
-  These methods implement the core functionality to make 
+  These methods implement the core functionality to make
   the API_ wrapper methods and the 'Helper' methods work.
 =end
 
@@ -80,15 +80,15 @@ class Client
    #
    # To create an instance of QuickBase::Client using a Hash of options,
    # use QuickBase::Client.init(options) instead of QuickBase::Client.new()
-   def initialize( username = nil, 
-                       password = nil, 
-                       usertoken = nil, 
-                       appname = nil, 
-                       useSSL = true, 
-                       printRequestsAndResponses = false, 
-                       stopOnError = false, 
-                       showTrace = false, 
-                       org = "www", 
+   def initialize( username = nil,
+                       password = nil,
+                       usertoken = nil,
+                       appname = nil,
+                       useSSL = true,
+                       printRequestsAndResponses = false,
+                       stopOnError = false,
+                       showTrace = false,
+                       org = "www",
                        apptoken = nil,
                        debugHTTPConnection = false,
                        domain = "quickbase",
@@ -102,11 +102,11 @@ class Client
          @stopOnError = stopOnError
          @escapeBR = @ignoreCR = @ignoreLF = @ignoreTAB = true
          toggleTraceInfo( showTrace ) if showTrace
-         setHTTPConnectionAndqbhost( useSSL, org, domain, proxy_options )         
+         setHTTPConnectionAndqbhost( useSSL, org, domain, proxy_options )
          debugHTTPConnection() if debugHTTPConnection
          @standardRequestHeaders = { "Content-Type" => "application/xml" }
-         
-         
+
+
          if username and password
             authenticate( username, password )
             if appname and @errcode == "0"
@@ -117,23 +117,23 @@ class Client
                end
             end
          end
-         
+
          if usertoken
             @usertoken = usertoken
          end
-        
-         
+
+
       rescue Net::HTTPBadRequest => @lastError
       rescue Net::HTTPBadResponse => @lastError
       rescue Net::HTTPHeaderSyntaxError => @lastError
       rescue StandardError => @lastError
       end
     end
-    
+
    # Class method to create an instance of QuickBase::Client using a Hash of parameters.
    # E.g. qbc = QuickBase::Client.init( { "stopOnError" => true,  "printRequestsAndResponses" => true } )
    def Client.init( options )
-     
+
      options ||= {}
      options["useSSL"] ||= true
      options["printRequestsAndResponses"] ||= false
@@ -143,12 +143,12 @@ class Client
      options["debugHTTPConnection"] ||= false
      options["domain"] ||= "quickbase"
      options["proxy_options"] ||= nil
-     
-     instance = Client.new( options["username"], 
-                                     options["password"], 
-                                     options["usertoken"], 
+
+     instance = Client.new( options["username"],
+                                     options["password"],
+                                     options["usertoken"],
                                      options["appname"],
-                                     options["useSSL"], 
+                                     options["useSSL"],
                                      options["printRequestsAndResponses"],
                                      options["stopOnError"],
                                      options["showTrace"],
@@ -168,25 +168,25 @@ class Client
         if proxy_options
            @httpConnection = HTTPClient.new( "#{proxy_options["proxy_server"]}:#{proxy_options["proxy_port"] || useSSL ? "443" : "80"}" )
            @httpConnection.set_auth(proxy_options["proxy_server"], proxy_options["proxy_user"], proxy_options["proxy_password"])
-        else  
-           @httpConnection = HTTPClient.new 
+        else
+           @httpConnection = HTTPClient.new
         end
-      else  
+      else
         if proxy_options
            @httpProxy = Net::HTTP::Proxy(proxy_options["proxy_server"], proxy_options["proxy_port"], proxy_options["proxy_user"], proxy_options["proxy_password"])
            @httpConnection = @httpProxy.new( "#{@org}.#{@domain}.com", useSSL ? 443 : 80)
         else
            @httpConnection = Net::HTTP.new( "#{@org}.#{@domain}.com", useSSL ? 443 : 80 )
-        end  
+        end
         @httpConnection.use_ssl = useSSL
         @httpConnection.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
    end
-    
+
    # Causes useful information to be printed to the screen for every HTTP request.
    def debugHTTPConnection()
       @httpConnection.set_debug_output $stdout if @httpConnection and USING_HTTPCLIENT == false
-   end  
+   end
 
    # Sets the QuickBase URL and port to use for requests.
    def setqbhost( useSSL, org = "www", domain = "quickbase" )
@@ -218,10 +218,10 @@ class Client
 
       # set up the request
       getDBforRequestURL( api_Request )
-      
+
       getAuthenticationXMLforRequest( api_Request )
-          
-      
+
+
       isHTMLRequest = isHTMLRequest?( api_Request )
       api_Request = "API_" + api_Request.to_s if prependAPI?( api_Request )
 
@@ -251,16 +251,16 @@ class Client
             response = @httpConnection.post( @requestURL, @requestXML, @requestHeaders )
             @responseCode = response.status
             @responseXML = response.content
-         else  
+         else
             if Net::HTTP.version_1_2?
                response = @httpConnection.post( @requestURL, @requestXML, @requestHeaders )
                @responseCode = response.code
                @responseXML = response.body
             else
                @responseCode, @responseXML = @httpConnection.post( @requestURL, @requestXML, @requestHeaders )
-            end	
+            end
          end
-          
+
          printResponse( @responseCode,  @responseXML ) if @printRequestsAndResponses
 
          if not isHTMLRequest
@@ -298,7 +298,7 @@ class Client
       self
    end
 
-   # Determines whether the URL for a QuickBase request is for a 
+   # Determines whether the URL for a QuickBase request is for a
    # specific database table or not, and returns the appropriate string
    # for that portion of the request URL.
    def getDBforRequestURL( api_Request )
@@ -311,11 +311,11 @@ class Client
       end
    end
 
-   # Returns the request XML for either a ticket or a username and password. 
-   # The XML includes a apptoken if one has been set. 
+   # Returns the request XML for either a ticket or a username and password.
+   # The XML includes a apptoken if one has been set.
    def getAuthenticationXMLforRequest( api_Request )
       @authenticationXML = ""
-      
+
       if @usertoken
         @authenticationXML = toXML( :usertoken, @usertoken )
       else
@@ -325,7 +325,7 @@ class Client
              @authenticationXML = toXML( :username, @username ) + toXML( :password, @password )
           end
       end
-      
+
       @authenticationXML << toXML( :apptoken, @apptoken ) if @apptoken
    end
 
@@ -345,8 +345,8 @@ class Client
       ret = false if request.to_s.include?("API_") or request.to_s.include?("QBIS_")
       ret
     end
-    
-   # Turns program stack tracing on or off.  
+
+   # Turns program stack tracing on or off.
    # If followed by a block, the tracing will be toggled on or off at the end of the block.
    def toggleTraceInfo( showTrace )
       if showTrace
@@ -491,7 +491,7 @@ class Client
       end
       attributes
     end
-    
+
    # Gets a field name (i.e. QuickBase field label) using a field ID.
    # getSchema() or doQuery()  should be called before this if you don't supply the dbid.
    def lookupFieldNameFromID( fid, dbid=nil )
@@ -537,7 +537,7 @@ class Client
    def lookupFieldsByType( type )
       findElementsByAttributeValue( @fields, "field_type", type )
    end
-   
+
    # Returns the value of a field property, or nil.
    def lookupFieldPropertyByName( fieldName, property )
       theproperty = nil
@@ -555,7 +555,7 @@ class Client
       does_total = lookupFieldPropertyByName(fieldName,"does_total")
       ret = does_total and does_total == "1"
    end
-   
+
    # Returns whether a field will show an Average on reports.
    def isAverageField?(fieldName)
       does_average = lookupFieldPropertyByName(fieldName,"does_average")
@@ -573,7 +573,7 @@ class Client
        fid.to_i < 6
    end
 
-   # Returns a human-readable string representation of a QuickBase field value.  
+   # Returns a human-readable string representation of a QuickBase field value.
    # Also required for subsequent requests to QuickBase.
    def formatFieldValue( value, type, options = nil )
       if value and type
@@ -586,16 +586,16 @@ class Client
                value = formatTimeOfDay( value, options )
             when "duration"
                value = formatDuration( value, options )
-            when "currency"   
+            when "currency"
                value = formatCurrency( value, options )
-            when "percent"   
+            when "percent"
                value = formatPercent( value, options )
          end
       end
       value
    end
 
-   # Recursive method to print a simplified (yaml-like) tree of the XML returned by QuickBase.  
+   # Recursive method to print a simplified (yaml-like) tree of the XML returned by QuickBase.
    # Translates field IDs into field names.
    # Very useful during debugging.
    def printChildElements( element, indent = 0 )
@@ -625,8 +625,8 @@ class Client
       self
    end
    def _printChildElements() printChildElements( @qdbapi ) end
-   
-   # Recursive method to generate a simplified (yaml-like) tree of the XML returned by QuickBase.  
+
+   # Recursive method to generate a simplified (yaml-like) tree of the XML returned by QuickBase.
    # Translates field IDs into field names.
    def childElementsAsString( element, indent = 0 )
       ret = ""
@@ -650,8 +650,8 @@ class Client
          element.each{ |e| ret << childElementsAsString( e ) }
       end
       ret
-   end  
-   def _childElementsAsString()  childElementsAsString( @qdbapi ) end  
+   end
+   def _childElementsAsString()  childElementsAsString( @qdbapi ) end
 
    # Recursive method to process leaf and (optionally) parent elements
    # of any XML element returned by QuickBase.
@@ -671,39 +671,39 @@ class Client
          end
       end
     end
-    
+
    # Enables alternative syntax for processing data using id values or xml element names. E.g:
    #
-   # qbc.bcdcajmrh.qid_1.printChildElements(qbc.records) 
+   # qbc.bcdcajmrh.qid_1.printChildElements(qbc.records)
    # - prints the records returned by query 1 from table bcdcajmrh
    #
    # puts qbc.bcdcajmrf.xml_desc
-   # - get the description from the bcdcajmrf application 
+   # - get the description from the bcdcajmrf application
    #
-   # puts qbc.dbid_8emtadvk.rid_24105.fid_6 
+   # puts qbc.dbid_8emtadvk.rid_24105.fid_6
    # - print field 6 from record 24105 in table 8emtadvk
    def method_missing(missing_method_name, *missing_method_args)
      method_s = missing_method_name.to_s
-     if method_s.match(/dbid_.+/) 
+     if method_s.match(/dbid_.+/)
        if QuickBase::Misc.isDbidString?(method_s.sub("dbid_",""))
-          getSchema(method_s.sub("dbid_","")) 
+          getSchema(method_s.sub("dbid_",""))
        end
-     elsif @dbid and method_s.match(/rid_[0-9]+/) 
+     elsif @dbid and method_s.match(/rid_[0-9]+/)
        _setActiveRecord(method_s.sub("rid_",""))
        @fieldValue = @field_data_list
-     elsif @dbid and method_s.match(/qid_[0-9]+/) 
+     elsif @dbid and method_s.match(/qid_[0-9]+/)
        doQuery(@dbid,nil,method_s.sub("qid_",""))
-     elsif @dbid and method_s.match(/fid_[0-9]+/) 
+     elsif @dbid and method_s.match(/fid_[0-9]+/)
         if @field_data_list
-          @fieldValue = getFieldDataValue(method_s.sub("fid_","")) 
+          @fieldValue = getFieldDataValue(method_s.sub("fid_",""))
        else
           lookupField(method_s.sub("fid_",""))
-       end  
-     elsif @dbid and method_s.match(/pageid_[0-9]+/) 
+       end
+     elsif @dbid and method_s.match(/pageid_[0-9]+/)
        _getDBPage(method_s.sub("pageid_",""))
      elsif @dbid and method_s.match(/userid_.+/)
-       _getUserRole(method_s.sub("userid_",""))       
-     elsif @dbid and @rid and @fid and method_s.match(/vid_[0-9]+/) 
+       _getUserRole(method_s.sub("userid_",""))
+     elsif @dbid and @rid and @fid and method_s.match(/vid_[0-9]+/)
         downLoadFile( @dbid, @rid, @fid, method_s.sub("vid_","") )
      elsif @dbid and method_s.match(/import_[0-9]+/)
        _runImport(method_s.sub("import_",""))
@@ -714,14 +714,14 @@ class Client
           @fieldValue = @qdbapi.send(method_s.sub("xml_",""))
        end
      elsif QuickBase::Misc.isDbidString?(method_s)
-       getSchema(method_s) 
-     else  
+       getSchema(method_s)
+     else
        raise "'#{method_s}' is not a valid method in the QuickBase::Client class."
      end
      return @fieldValue if @fieldValue.is_a?(REXML::Element) # chain XML lookups
-     return @fieldValue if @fieldValue.is_a?(String) # assume we just want a field value 
+     return @fieldValue if @fieldValue.is_a?(String) # assume we just want a field value
      self # otherwise, allows chaining of all above
-   end     
+   end
 
    # Returns the first XML sub-element with the specified attribute value.
    def findElementByAttributeValue( elements, attribute_name, attribute_value )
@@ -796,7 +796,7 @@ class Client
           if field_data
             valueElement = field_data.elements[ "value" ]
             value = valueElement.text if valueElement.has_text?
-          end   
+          end
       end
       value
    end
@@ -809,11 +809,11 @@ class Client
          if field_data
             printableElement = field_data.elements[ "printable" ]
             printable = printableElement.text if printableElement and printableElement.has_text?
-         end   
+         end
       end
       printable
     end
-    
+
    # Gets the ID for a field using the QuickBase field label.
    # getSchema() or doQuery()  should be called before this if you don't supply the dbid.
    def lookupFieldIDByName( fieldName, dbid=nil )
@@ -822,14 +822,14 @@ class Client
       if @fields
          @fields.each_element_with_attribute( "id" ){ |f|
             if f.name == "field" and f.elements[ "label" ].text.downcase == fieldName.downcase
-               ret = f.attributes[ "id" ].dup 
+               ret = f.attributes[ "id" ].dup
                break
             end
          }
       end
       ret
     end
-    
+
    # Get an array of field IDs for a table.
   def getFieldIDs(dbid = nil, exclude_built_in_fields = false )
     fieldIDs = []
@@ -838,10 +838,10 @@ class Client
     if @fields
        @fields.each_element_with_attribute( "id" ){|f|
           next if exclude_built_in_fields and isBuiltInField?(f.attributes["id"])
-          fieldIDs << f.attributes[ "id" ].dup 
+          fieldIDs << f.attributes[ "id" ].dup
        }
     end
-    fieldIDs   
+    fieldIDs
   end
 
    # Get an array of field names for a table.
@@ -865,7 +865,7 @@ class Client
       end
       fieldNames
     end
-    
+
    # Get a Hash of application variables.
     def getApplicationVariables(dbid=nil)
       variablesHash = {}
@@ -879,14 +879,14 @@ class Client
          }
       end
       variablesHash
-    end  
-    
+    end
+
    # Get the value of an application variable.
     def getApplicationVariable(variableName,dbid=nil)
       variablesHash = getApplicationVariables(dbid)
       variablesHash[variableName]
     end
-   
+
    # Returns the XML element for a record with the specified ID.
    def lookupRecord( rid )
       @record = findElementByAttributeValue( @records, "id", rid )
@@ -912,7 +912,7 @@ class Client
       end
       nil
    end
-   
+
    # Given the name of a QuickBase table, returns the QuickBase representation of the table name.
    def formatChdbidName( tableName )
       tableName.downcase!
@@ -950,19 +950,19 @@ class Client
 
    # Get the name of a table given its id.
    def getTableName(dbid)
-      tableName = nil 
+      tableName = nil
       dbid ||= @dbid
       if getSchema(dbid)
         tableName = getResponseElement( "table/name" ).text
       end
       tableName
-   end   
+   end
 
    # Get a list of the names of the child tables of an application.
    def getTableNames(dbid, lowercaseOrUpperCase = "")
       tableNames = []
       dbid ||= @dbid
-      getSchema(dbid)      
+      getSchema(dbid)
       if @chdbids
          chdbidArray = findElementsByAttributeName( @chdbids, "name" )
          chdbidArray.each{ |chdbid|
@@ -989,7 +989,7 @@ class Client
    def getTableIDs(dbid)
       tableIDs = []
       dbid ||= @dbid
-      getSchema(dbid)      
+      getSchema(dbid)
       if @chdbids
          chdbidArray = findElementsByAttributeName( @chdbids, "name" )
          chdbidArray.each{ |chdbid|
@@ -1005,14 +1005,14 @@ class Client
    def getNumTables(dbid)
       numTables = 0
       dbid ||= @dbid
-      if getSchema(dbid)      
+      if getSchema(dbid)
         if @chdbids
            chdbidArray = findElementsByAttributeName( @chdbids, "name" )
            numTables = chdbidArray.length
          end
        end
-      numTables       
-  end     
+      numTables
+  end
 
    # Get a list of the names of the reports (i.e. queries) for a table.
     def getReportNames(dbid = @dbid)
@@ -1029,7 +1029,7 @@ class Client
            processChildElements(@queries,true,queriesProc)
         end
         reportNames
-    end  
+    end
 
    # Given a DBID, get the QuickBase realm it is in.
    def getRealmForDbid(dbid)
@@ -1043,13 +1043,13 @@ class Client
             parts = location.split(/\./)
             @realm = parts[0]
          rescue StandardError => error
-            @realm = nil 
+            @realm = nil
          end
       else
-         raise "Please get the HTTPClient gem: gem install httpclient" 
-      end   
+         raise "Please get the HTTPClient gem: gem install httpclient"
+      end
       @realm
-   end	
+   end
 
    # Builds the XML for a specific item included in a request to QuickBase.
    def toXML( tag, value = nil )
@@ -1063,7 +1063,7 @@ class Client
 
    # Returns whether a given string represents a valid QuickBase field type.
    def isValidFieldType?( type )
-      @validFieldTypes ||= %w{ checkbox dblink date duration email file fkey float formula currency 
+      @validFieldTypes ||= %w{ checkbox dblink date duration email file fkey float formula currency
                   lookup multiuserid phone percent rating recordid text timeofday timestamp url userid icalendarbutton }
       @validFieldTypes.include?( type )
    end
@@ -1071,18 +1071,18 @@ class Client
   # Returns a field type string given the more human-friendly label for a field type.
   def fieldTypeForLabel( fieldTypeLabel )
     @fieldTypeLabelMap ||= Hash["Text","text","Numeric","float","Date / Time","timestamp","Date","date","Checkbox","checkbox","Database Link","dblink","Duration","duration","Email","email","File Attachment","file","Numeric-Currency","currency","Numeric-Rating","rating","Numeric-Percent","percent","Phone Number","phone","Relationship","fkey","Time Of Day","timeofday","URL","url","User","user","Record ID#","recordid","Report Link","dblink","iCalendar","icalendarbutton"]
-    @fieldTypeLabelMap[fieldTypeLabel] 
-  end  
+    @fieldTypeLabelMap[fieldTypeLabel]
+  end
 
    # Returns whether a given string represents a valid QuickBase field property.
    def isValidFieldProperty?( property )
       if @validFieldProperties.nil?
          @validFieldProperties = %w{ allow_new_choices allowHTML appears_by_default append_only
               blank_is_zero bold carrychoices comma_start cover_text currency_format currency_symbol
-              decimal_places default_kind default_today default_today default_value display_dow 
-              display_graphic display_month display_relative display_time display_today display_user display_zone 
+              decimal_places default_kind default_today default_today default_value display_dow
+              display_graphic display_month display_relative display_time display_today display_user display_zone
               does_average does_total doesdatacopy exact fieldhelp find_enabled foreignkey format formula
-              has_extension hours24 label max_versions maxlength nowrap num_lines required sort_as_given 
+              has_extension hours24 label max_versions maxlength nowrap num_lines required sort_as_given
               source_fid source_fieldname target_dbid target_dbname target_fid target_fieldname unique units
               use_new_window width }
       end
@@ -1100,7 +1100,7 @@ class Client
 
          name = name.downcase if name
          name = name.gsub( /\W/, "_" )  if name
- 
+
          if filename or value
             @xml = "<field "
             if name
@@ -1158,7 +1158,7 @@ class Client
            elsif fileNameOrFileContents.is_a?( String )
               encodedFileContents = ""
               buffer = fileNameOrFileContents.slice!(0,60)
-              while buffer and buffer.length > 0 
+              while buffer and buffer.length > 0
                  buffer = buffer.to_s
                  encodedFileContents << [buffer].pack('m').tr( "\r\n", '' )
                  buffer = fileNameOrFileContents.slice!(0,60)
@@ -1184,7 +1184,7 @@ class Client
       @fvlist << FieldValuePairXML.new( self, name, fid, filename, value ).to_s
       @fvlist
    end
-   
+
    # Replaces a field value in the list of fields to be set by the next addRecord() or editRecord() call to QuickBase.
    def replaceFieldValuePair( name, fid, filename, value )
       if @fvlist
@@ -1196,7 +1196,7 @@ class Client
                @fvlist[i] = FieldValuePairXML.new( self, name, fid, filename, value ).to_s
                break
             end
-         } 
+         }
       end
       @fvlist
    end
@@ -1267,7 +1267,7 @@ class Client
       end
       xmlRequestData
    end
-   
+
    # Returns the clist associated with a query.
    def getColumnListForQuery( id, name )
       clistForQuery = nil
@@ -1281,7 +1281,7 @@ class Client
       end
       clistForQuery
    end
-    
+
    alias getColumnListForReport getColumnListForQuery
 
    # Returns the slist associated with a query.
@@ -1297,8 +1297,8 @@ class Client
       end
       slistForQuery
    end
-   
-   alias getSortListForReport getSortListForQuery 
+
+   alias getSortListForReport getSortListForQuery
 
    # Returns the criteria associated with a query.
    def getCriteriaForQuery( id, name )
@@ -1313,8 +1313,8 @@ class Client
       end
       criteriaForQuery
    end
-   
-   alias getCriteriaForReport getCriteriaForQuery 
+
+   alias getCriteriaForReport getCriteriaForQuery
 
    # Returns a valid query operator.
    def verifyQueryOperator( operator, fieldType )
@@ -1425,7 +1425,7 @@ class Client
       option = "hours" if option.nil?
       if value.nil?
          value = ""
-      else   
+      else
          seconds = (value.to_i/1000)
          minutes = (seconds/60)
          hours = (minutes/60)
@@ -1447,20 +1447,20 @@ class Client
       timeOfDay = ""
       timeOfDay = Time.at(milliseconds.to_i/1000).utc.strftime(format) if milliseconds
    end
-   
+
    # Returns a string formatted for a currency value.
    def formatCurrency( value, options = nil )
       value ||= "0.00"
       if !value.include?( '.' )
          value << ".00"
       end
-      
+
       currencySymbol = currencyFormat = nil
       if options
          currencySymbol = options["currencySymbol"]
          currencyFormat = options["currencyFormat"]
       end
-      
+
       if currencySymbol
          if currencyFormat
             if currencyFormat == "0"
@@ -1470,7 +1470,7 @@ class Client
                   value.gsub!("-","-#{currencySymbol}")
                elsif value.include?("+")
                   value.gsub!("+","+#{currencySymbol}")
-               else   
+               else
                   value = "#{currencySymbol}#{value}"
                end
             elsif currencyFormat == "2"
@@ -1480,10 +1480,10 @@ class Client
             value = "#{currencySymbol}#{value}"
          end
       end
-      
+
       value
    end
-   
+
    # Returns a string formatted for a percent value, given the data from QuickBase
    def formatPercent( value, options = nil )
       if value
@@ -1495,8 +1495,8 @@ class Client
                value = int
             else
                value = "#{int}.#{fraction[0,2]}"
-            end            
-         end         
+            end
+         end
       else
          value = "0"
       end
@@ -1545,6 +1545,7 @@ class Client
 
    # Modify the given string for use as a XML field value.
    def encodeXML( text, doNPChars = false )
+      text = text.dup
       encodingStrings { |key,value| text.gsub!( key, value ) if text }
       text.gsub!( /([^;\/?:@&=+\$,A-Za-z0-9\-_.!~*'()# ])/ ) { |c| escapeXML( $1 ) } if text and doNPChars
       text
@@ -1558,7 +1559,7 @@ class Client
    end
 
    # Called when a response is returned from QuickBase.
-   # Subscribers listening for onSetActiveTable, onSetActiveRecord, onSetActiveField events 
+   # Subscribers listening for onSetActiveTable, onSetActiveRecord, onSetActiveField events
    # will be notified if the 'active' table, record, or field changes.
    def fireDBChangeEvents()
 
@@ -1666,7 +1667,7 @@ class Client
    #  Each method with dbid as the first parameter has a corresponding method with '_' before the name.
    #  The '_' methods re-use @dbid instead of a requiring the dbid parameter.
    # ------------------------------------------------------------------------------------
-   
+
    # API_AddField
    def addField( dbid, label, type, mode = nil )
 
@@ -1687,7 +1688,7 @@ class Client
          raise "addField: Invalid field type '#{type}'.  Valid types are " + @validFieldTypes.join( "," )
       end
    end
-    
+
    # API_AddField, using the active table id.
    def _addField( label, type, mode = nil ) addField( @dbid, label, type, mode )  end
 
@@ -1695,7 +1696,7 @@ class Client
    def addRecord(  dbid, fvlist = nil, disprec = nil, fform = nil, ignoreError = nil, update_id = nil, msInUTC =nil )
 
       @dbid, @fvlist, @disprec, @fform, @ignoreError, @update_id, @msInUTC = dbid, fvlist, disprec, fform, ignoreError, update_id, msInUTC
-      setFieldValues( fvlist, false ) if fvlist.is_a?(Hash) 
+      setFieldValues( fvlist, false ) if fvlist.is_a?(Hash)
 
       xmlRequestData = ""
       if @fvlist and @fvlist.length > 0
@@ -1716,8 +1717,8 @@ class Client
       return self if @chainAPIcalls
       return @rid, @update_id
     end
-    
-   # API_AddRecord, using the active table id. 
+
+   # API_AddRecord, using the active table id.
    def _addRecord( fvlist = nil, disprec = nil, fform = nil, ignoreError = nil, update_id = nil )
       addRecord( @dbid, fvlist, disprec, fform, ignoreError, update_id )
    end
@@ -1747,59 +1748,59 @@ class Client
       return self if @chainAPIcalls
       @pageid
     end
-    
+
    # API_AddReplaceDBPage, using the active table id.
    def _addReplaceDBPage( *args ) addReplaceDBPage( @dbid, args ) end
 
    # API_AddUserToRole
    def addUserToRole( dbid, userid, roleid )
-      @dbid, @userid, @roleid  = dbid, userid, roleid 
+      @dbid, @userid, @roleid  = dbid, userid, roleid
 
-      xmlRequestData = toXML( :userid, @userid ) 
-      xmlRequestData << toXML( :roleid, @roleid ) 
-      
+      xmlRequestData = toXML( :userid, @userid )
+      xmlRequestData << toXML( :roleid, @roleid )
+
       sendRequest( :addUserToRole, xmlRequestData )
-      
+
       return self if @chainAPIcalls
       @requestSucceeded
     end
 
-    # API_AddUserToRole, using the active table id. 
+    # API_AddUserToRole, using the active table id.
     def _addUserToRole( userid, roleid ) addUserToRole( @dbid, userid, roleid ) end
-   
+
    # API_AssertFederatedIdentity (IPP only)
    def assertFederatedIdentity( dbid, serviceProviderID, targetURL )
      @dbid, @serviceProviderID, @targetURL = dbid, serviceProviderID, targetURL
-     
-      xmlRequestData = toXML( :serviceProviderID, @serviceProviderID ) 
-      xmlRequestData << toXML( :targetURL, @targetURL ) 
-      
+
+      xmlRequestData = toXML( :serviceProviderID, @serviceProviderID )
+      xmlRequestData << toXML( :targetURL, @targetURL )
+
       sendRequest( :assertFederatedIdentity, xmlRequestData )
-      
-      return self if @chainAPIcalls
-      @requestSucceeded
-   end  
-    
-   # API_AttachIDSRealm (IPP only) 
-   def attachIDSRealm( dbid, realm )
-     @dbid, @realm = dbid, realm 
-     
-      xmlRequestData = toXML( :realm, @realm ) 
-      
-      sendRequest( :attachIDSRealm, xmlRequestData )
-      
+
       return self if @chainAPIcalls
       @requestSucceeded
    end
 
-   # API_DetachIDSRealm (IPP only) 
+   # API_AttachIDSRealm (IPP only)
+   def attachIDSRealm( dbid, realm )
+     @dbid, @realm = dbid, realm
+
+      xmlRequestData = toXML( :realm, @realm )
+
+      sendRequest( :attachIDSRealm, xmlRequestData )
+
+      return self if @chainAPIcalls
+      @requestSucceeded
+   end
+
+   # API_DetachIDSRealm (IPP only)
    def detachIDSRealm( dbid, realm )
-     @dbid, @realm = dbid, realm 
-     
-      xmlRequestData = toXML( :realm, @realm ) 
-      
+     @dbid, @realm = dbid, realm
+
+      xmlRequestData = toXML( :realm, @realm )
+
       sendRequest( :detachIDSRealm, xmlRequestData )
-      
+
       return self if @chainAPIcalls
       @requestSucceeded
    end
@@ -1810,7 +1811,7 @@ class Client
      sendRequest( :deleteAppZip )
      return self if @chainAPIcalls
      @responseCode
-   end 
+   end
 
   # API_DumpAppZip
    def dumpAppZip( dbid )
@@ -1820,15 +1821,15 @@ class Client
      sendRequest( :dumpAppZip, xmlRequestData )
      return self if @chainAPIcalls
      @responseCode
-   end 
+   end
 
-   # API_GetIDSRealm (IPP only) 
+   # API_GetIDSRealm (IPP only)
    def getIDSRealm( dbid )
-     @dbid = dbid 
-      
+     @dbid = dbid
+
       sendRequest( :getIDSRealm )
       @realm = getResponseValue( :realm)
-      
+
       return self if @chainAPIcalls
       @realm
    end
@@ -1837,7 +1838,7 @@ class Client
    def authenticate( username, password, hours = nil )
 
       @username, @password, @hours = username, password, hours
-      
+
       if @usertoken
         return
       end
@@ -1851,7 +1852,7 @@ class Client
          else
             sendRequest( :authenticate )
          end
-          
+
          @userid = getResponseValue( :userid )
          return self if @chainAPIcalls
          return @ticket, @userid
@@ -1912,8 +1913,8 @@ class Client
       return self if @chainAPIcalls
       return @username, @view, @modify, @create, @delete, @saveviews, @admin, @rolename
     end
-    
-   # API_ChangePermission (appears to be deprecated), using the active table id. 
+
+   # API_ChangePermission (appears to be deprecated), using the active table id.
    def _changePermission( *args ) changePermission( @dbid, args ) end
 
    # API_ChangeRecordOwner
@@ -1930,33 +1931,33 @@ class Client
       return self if @chainAPIcalls
       @requestSucceeded
    end
-    
+
    # API_ChangeRecordOwner
    def _changeRecordOwner( rid, newowner ) changeRecordOwner( @dbid, rid, newowner ) end
 
-   # API_ChangeUserRole. 
+   # API_ChangeUserRole.
    def changeUserRole( dbid, userid, roleid, newroleid )
       @dbid, @userid, @roleid, @newroleid = dbid, userid, roleid, newroleid
-      
+
       xmlRequestData = toXML( :userid, @userid )
       xmlRequestData << toXML( :roleid, @roleid )
       xmlRequestData << toXML( :newroleid, @newroleid )
-      
+
       sendRequest( :changeUserRole, xmlRequestData )
 
       return self if @chainAPIcalls
       @requestSucceeded
     end
-    
-   # API_ChangeUserRole, using the active table id. 
+
+   # API_ChangeUserRole, using the active table id.
    def _changeUserRole( userid, roleid, newroleid ) changeUserRole( @dbid, userid, roleid, newroleid )  end
 
    # API_CloneDatabase
    def cloneDatabase( dbid, newdbname, newdbdesc, keepData, asTemplate = nil, usersAndRoles = nil )
 
       @dbid, @newdbname, @newdbdesc, @keepData, @asTemplate, @usersAndRoles = dbid, newdbname, newdbdesc, keepData, asTemplate, usersAndRoles
-      
-      @keepData = "1" if @keepData.to_s == "true" 
+
+      @keepData = "1" if @keepData.to_s == "true"
       @keepData = "0" if @keepData != "1"
 
       xmlRequestData = toXML( :newdbname, @newdbname )
@@ -1972,17 +1973,17 @@ class Client
       return self if @chainAPIcalls
       @newdbid
     end
-    
-   # API_CloneDatabase, using the active table id. 
+
+   # API_CloneDatabase, using the active table id.
    def _cloneDatabase( *args ) cloneDatabase( @dbid, args ) end
 
    # API_CopyMasterDetail
    def copyMasterDetail( dbid, destrid, sourcerid, copyfid = nil, recurse = nil, relfids = nil )
-      
+
       raise "copyfid must be specified when destrid is 0." if destrid == "0" and copyfid.nil?
-      
+
       @dbid, @destrid, @sourcerid, @copyfid, @recurse, @relfids = dbid, destrid, sourcerid, copyfid, recurse, relfids
- 
+
       xmlRequestData = toXML( :destrid, @destrid)
       xmlRequestData << toXML( :sourcerid, @sourcerid )
       xmlRequestData << toXML( :copyfid, @copyfid ) if @copyfid
@@ -1996,9 +1997,9 @@ class Client
 
       return self if @chainAPIcalls
       return @parentrid, @numCreated
-   end	   
-   
-   # API_CopyMasterDetail, using the active table id. 
+   end
+
+   # API_CopyMasterDetail, using the active table id.
    def _copyMasterDetail( *args ) copyMasterDetail( @dbid, args ) end
 
    # API_CreateDatabase
@@ -2028,12 +2029,12 @@ class Client
       xmlRequestData << toXML( :pnoun, @pnoun )
       sendRequest( :createTable, xmlRequestData )
 
-      @newdbid  = getResponseValue( :newdbid ) 
+      @newdbid  = getResponseValue( :newdbid )
       @newdbid  ||= getResponseValue( :newDBID ) #temporary
-      @dbid = @newdbid 
+      @dbid = @newdbid
 
       return self if @chainAPIcalls
-      @newdbid 
+      @newdbid
    end
 
    # API_DeleteDatabase
@@ -2048,7 +2049,7 @@ class Client
       @requestSucceeded
    end
 
-   # API_DeleteDatabase, using the active table id. 
+   # API_DeleteDatabase, using the active table id.
    def _deleteDatabase() deleteDatabase( @dbid ) end
 
    # API_DeleteField
@@ -2061,11 +2062,11 @@ class Client
       return self if @chainAPIcalls
       @requestSucceeded
     end
-    
-   # API_DeleteField, using the active table id. 
+
+   # API_DeleteField, using the active table id.
    def _deleteField( fid ) deleteField( @dbid, fid ) end
 
-   # Delete a field, using its name instead of its id. Uses the active table id. 
+   # Delete a field, using its name instead of its id. Uses the active table id.
    def _deleteFieldName( fieldName )
       if @dbid and @fields
          @fid = lookupFieldIDByName( fieldName )
@@ -2086,18 +2087,18 @@ class Client
       return self if @chainAPIcalls
       @requestSucceeded
     end
-    
-   # API_DeleteRecord, using the active table id. 
+
+   # API_DeleteRecord, using the active table id.
    def _deleteRecord( rid ) deleteRecord( @dbid, rid ) end
 
    # API_DoQuery
    def doQuery( dbid, query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil  )
 
       @dbid, @clist, @slist, @fmt, @options = dbid, clist, slist, fmt, options
-      
+
       @clist ||= getColumnListForQuery(qid, qname)
       @slist ||= getSortListForQuery(qid, qname)
-      
+
       xmlRequestData = getQueryRequestXML( query, qid, qname )
       xmlRequestData << toXML( :clist, @clist ) if @clist
       xmlRequestData << toXML( :slist, @slist ) if @slist
@@ -2123,54 +2124,54 @@ class Client
       return self if @chainAPIcalls
 
       if block_given?
-         if @records 
+         if @records
             @records.each { |element|  yield element }
          else
              yield nil
-         end  
+         end
       else
          @records
       end
 
    end
-   
-   # API_DoQuery, using the active table id. 
+
+   # API_DoQuery, using the active table id.
    def _doQuery( *args  ) doQuery( @dbid, args ) end
-   
+
    # Runs API_DoQuery using the name of a query.  Uses the active table id .
    def _doQueryName( queryName ) doQuery( @dbid, nil, nil, queryName ) end
 
-   # version of doQuery that takes a Hash of parameters 
+   # version of doQuery that takes a Hash of parameters
    def _doQueryHash( doQueryOptions )
      doQueryOptions ||= {}
      raise "options must be a Hash" unless doQueryOptions.is_a?(Hash)
      doQueryOptions["dbid"] ||= @dbid
      doQueryOptions["fmt"] ||= "structured"
-     doQuery( doQueryOptions["dbid"], 
+     doQuery( doQueryOptions["dbid"],
                    doQueryOptions["query"],
-                   doQueryOptions["qid"], 
-                   doQueryOptions["qname"], 
-                   doQueryOptions["clist"], 
-                   doQueryOptions["slist"], 
-                   doQueryOptions["fmt"], 
+                   doQueryOptions["qid"],
+                   doQueryOptions["qname"],
+                   doQueryOptions["clist"],
+                   doQueryOptions["slist"],
+                   doQueryOptions["fmt"],
                    doQueryOptions["options"] )
    end
-                 
+
    # API_DoQueryCount
    def doQueryCount( dbid, query )
       @dbid, @query = dbid, query
-      
+
       xmlRequestData = toXML( :query, @query )
-      
+
       sendRequest( :doQueryCount, xmlRequestData )
 
       @numMatches = getResponseValue( :numMatches )
 
       return self if @chainAPIcalls
      @numMatches
-   end     
-   
-   # API_DoQueryCount, using the active table id. 
+   end
+
+   # API_DoQueryCount, using the active table id.
    def _doQueryCount( query ) doQueryCount( @dbid, query ) end
 
    # Download a file's contents from a file attachment field in QuickBase.
@@ -2180,7 +2181,7 @@ class Client
       @dbid, @rid, @fid, @vid = dbid, rid, fid, vid
 
       @downLoadFileURL = "http://#{@org}.#{@domain}.com/up/#{dbid}/a/r#{rid}/e#{fid}/v#{vid}"
-      
+
       if @useSSL
          @downLoadFileURL.gsub!( "http:", "https:" )
       end
@@ -2198,12 +2199,12 @@ class Client
 
          if USING_HTTPCLIENT
             @responseCode = 404
-            @fileContents = @httpConnection.get_content( @downLoadFileURL, nil, @requestHeaders ) 
+            @fileContents = @httpConnection.get_content( @downLoadFileURL, nil, @requestHeaders )
             @responseCode = 200 if @fileContents
-         else  
+         else
             @responseCode, @fileContents = @httpConnection.get( @downLoadFileURL, @requestHeaders )
          end
-    
+
       rescue Net::HTTPBadResponse => @lastError
       rescue Net::HTTPHeaderSyntaxError => @lastError
       rescue StandardError => @lastError
@@ -2219,15 +2220,15 @@ class Client
       return self if @chainAPIcalls
       return @responseCode, @fileContents
     end
-    
+
    # Download a file's contents from a file attachment field in QuickBase.
    # You must write the contents to disk before a local file exists.
-   # Uses the active table id. 
+   # Uses the active table id.
    def _downLoadFile( rid, fid, vid = "0" ) downLoadFile( @dbid, rid, fid, vid ) end
 
    alias downloadFile downLoadFile
    alias _downloadFile _downLoadFile
-   
+
    # Download and save a file from a file attachment field in QuickBase.
    # Use the filename parameter to override the file name from QuickBase.
    def downloadAndSaveFile( dbid, rid, fid, filename = nil, vid = "0"  )
@@ -2245,12 +2246,12 @@ class Client
          end
       end
    end
-   
+
    # API_EditRecord
    def editRecord( dbid, rid, fvlist, disprec = nil, fform = nil, ignoreError = nil, update_id = nil, msInUTC =nil, key = nil )
 
       @dbid, @rid, @fvlist, @disprec, @fform, @ignoreError, @update_id, @msInUTC, @key = dbid, rid, fvlist, disprec, fform, ignoreError, update_id, msInUTC, key
-      setFieldValues( fvlist, false ) if fvlist.is_a?(Hash) 
+      setFieldValues( fvlist, false ) if fvlist.is_a?(Hash)
 
       xmlRequestData = toXML( :rid, @rid ) if @rid
       xmlRequestData = toXML( :key, @key ) if @key
@@ -2270,7 +2271,7 @@ class Client
       return @rid, @update_id
    end
 
-   # API_EditRecord, using the active table id. 
+   # API_EditRecord, using the active table id.
    def _editRecord( *args  ) editRecord( @dbid, args ) end
 
    # API_FieldAddChoices
@@ -2297,11 +2298,11 @@ class Client
       return @fid, @name, @numadded
    end
 
-   # API_FieldAddChoices, using the active table id. 
+   # API_FieldAddChoices, using the active table id.
    def _fieldAddChoices( fid, choice ) fieldAddChoices( @dbid, fid, choice ) end
 
    # Runs API_FieldAddChoices using a field name instead ofa field id.  Uses the active table id.
-   # Expects getSchema to have been run.    
+   # Expects getSchema to have been run.
    def _fieldNameAddChoices( fieldName, choice )
       if fieldName and choice and @fields
          @fid = lookupFieldIDByName( fieldName )
@@ -2334,7 +2335,7 @@ class Client
       return @fid, @name, @numremoved
    end
 
-   # API_FieldRemoveChoices, using the active table id. 
+   # API_FieldRemoveChoices, using the active table id.
    def _fieldRemoveChoices( fid, choice ) fieldRemoveChoices( @dbid, fid, choice ) end
 
    # Runs API_FieldRemoveChoices using a field name instead of a field id.  Uses the active table id.
@@ -2345,7 +2346,7 @@ class Client
       end
       nil
    end
-    
+
    # API_FindDBByname
    def findDBByname( dbname )
       @dbname = dbname
@@ -2363,7 +2364,7 @@ class Client
    def genAddRecordForm( dbid, fvlist = nil )
 
       @dbid, @fvlist = dbid, fvlist
-      setFieldValues( fvlist, false ) if fvlist.is_a?(Hash) 
+      setFieldValues( fvlist, false ) if fvlist.is_a?(Hash)
 
       xmlRequestData = ""
       @fvlist.each { |fv| xmlRequestData << fv } if @fvlist #see addFieldValuePair, clearFieldValuePairList, @fvlist
@@ -2376,7 +2377,7 @@ class Client
       @HTML
    end
 
-   # API_GenAddRecordForm, using the active table id. 
+   # API_GenAddRecordForm, using the active table id.
    def _genAddRecordForm( fvlist = nil ) genAddRecordForm( @dbid, fvlist ) end
 
    # API_GenResultsTable
@@ -2402,22 +2403,22 @@ class Client
       @HTML
    end
 
-   # API_GenResultsTable, using the active table id. 
+   # API_GenResultsTable, using the active table id.
    def _genResultsTable( *args ) genResultsTable( @dbid, args ) end
-   
+
    # API_GetAncestorInfo
    def getAncestorInfo( dbid )
       @dbid = dbid
 
       sendRequest( :getAncestorInfo )
-      
+
       @ancestorappid = getResponseValue( :ancestorappid )
       @oldestancestorappid = getResponseValue( :oldestancestorappid )
       @qarancestorappid = getResponseValue( :qarancestorappid )
 
       return self if @chainAPIcalls
       return @ancestorappid, @oldestancestorappid, @qarancestorappid
-   end  
+   end
 
    def _getAncestorInfo() getAncestorInfo(@dbid) end
 
@@ -2443,24 +2444,24 @@ class Client
          return @app, @tables
       end
    end
-   
-   # API_GetAppDTMInfo, using the active table id. 
+
+   # API_GetAppDTMInfo, using the active table id.
    def _getAppDTMInfo() getAppDTMInfo( @dbid ) end
 
    # API_GetBillingStatus
    def getBillingStatus( dbid )
       @dbid = dbid
-      
+
       sendRequest( :getBillingStatus )
-      
-      @lastPaymentDate = getResponseValue( :lastPaymentDate ) 
-      @status = getResponseValue( :status ) 
-      
+
+      @lastPaymentDate = getResponseValue( :lastPaymentDate )
+      @status = getResponseValue( :status )
+
       return self if @chainAPIcalls
       return @lastPaymentDate, @status
-    end  
-    
-   # API_GetBillingStatus, using the active table id. 
+    end
+
+   # API_GetBillingStatus, using the active table id.
    def _getBillingStatus() getBillingStatus(@dbid) end
 
    # API_GetDBInfo
@@ -2483,7 +2484,7 @@ class Client
       return @lastRecModTime, @lastModifiedTime, @createdTime, @lastAccessTime, @numRecords, @mgrID, @mgrName
    end
 
-   # API_GetDBInfo, using the active table id. 
+   # API_GetDBInfo, using the active table id.
    def _getDBInfo() getDBInfo( @dbid ) end
 
    # API_GetDBPage
@@ -2507,54 +2508,54 @@ class Client
       return self if @chainAPIcalls
       @pagebody
     end
-    
-   # API_GetDBPage, using the active table id. 
+
+   # API_GetDBPage, using the active table id.
    def _getDBPage(  pageid, pagename = nil ) getDBPage( @dbid,  pageid, pagename ) end
 
    # API_GetDBVar
    def getDBvar( dbid, varname )
       @dbid, @varname = dbid, varname
-      
+
       xmlRequestData = toXML( :varname, @varname )
-      
+
       sendRequest( :getDBvar, xmlRequestData )
-      
+
       @value = getResponseValue( :value )
-      
+
       return self if @chainAPIcalls
       @value
     end
-    
-   # API_GetDBVar, using the active table id. 
+
+   # API_GetDBVar, using the active table id.
    def _getDBvar( varname ) getDBvar( @dbid, varname ) end
-     
+
    # API_GetEntitlementValues
    def getEntitlementValues( dbid )
       @dbid = dbid
-      
+
       sendRequest( :getEntitlementValues )
-      
-      @productID = getResponseValue( :productID ) 
-      @planName = getResponseValue( :planName ) 
-      @planType = getResponseValue( :planType ) 
-      @maxUsers = getResponseValue( :maxUsers ) 
-      @currentUsers = getResponseValue( :currentUsers ) 
+
+      @productID = getResponseValue( :productID )
+      @planName = getResponseValue( :planName )
+      @planType = getResponseValue( :planType )
+      @maxUsers = getResponseValue( :maxUsers )
+      @currentUsers = getResponseValue( :currentUsers )
       @daysRemainingTrial = getResponseValue( :daysRemainingTrial )
       @entitlements = getResponseElement( :entitlements )
-      
+
       return self if @chainAPIcalls
       return @productID, @planName, @planType, @maxUsers, @currentUsers, @daysRemainingTrial, @entitlements
    end
 
-  # API_GetEntitlementValues, using the active table id. 
+  # API_GetEntitlementValues, using the active table id.
   def _getEntitlementValues() getEntitlementValues( @dbid ) end
 
    # API_GetFileAttachmentUsage
    def getFileAttachmentUsage( dbid )
       @dbid = dbid
-      
+
       sendRequest( :getFileAttachmentUsage )
-      
+
       @accountLimit = getResponseValue( :accountLimit )
       @accountUsage = getResponseValue( :accountUsage )
       @applicationLimit = getResponseValue( :applicationLimit )
@@ -2562,9 +2563,9 @@ class Client
 
       return self if @chainAPIcalls
       return @accountLimit, @accountUsage, @applicationLimit, @applicationUsage
-   end  
+   end
 
-   # API_GetFileAttachmentUsage, using the active table id. 
+   # API_GetFileAttachmentUsage, using the active table id.
    def _getFileAttachmentUsage() getFileAttachmentUsage( @dbid ) end
 
    # API_GetNumRecords
@@ -2577,30 +2578,30 @@ class Client
       return self if @chainAPIcalls
       @num_records
    end
-   
-   # API_GetNumRecords, using the active table id. 
+
+   # API_GetNumRecords, using the active table id.
    def _getNumRecords() getNumRecords( @dbid ) end
 
    # API_GetOneTimeTicket
    def getOneTimeTicket()
-      
+
       sendRequest( :getOneTimeTicket )
-      
+
       @ticket = getResponseValue( :ticket )
       @userid = getResponseValue( :userid )
-      
+
       return self if @chainAPIcalls
       return @ticket, @userid
     end
-    
+
    # API_GetFileUploadToken
    def getFileUploadToken()
-      
+
       sendRequest( :getFileUploadToken)
-      
+
       @fileUploadToken = getResponseValue( :fileUploadToken )
       @userid = getResponseValue( :userid )
-      
+
       return self if @chainAPIcalls
       return @fileUploadToken, @userid
     end
@@ -2621,8 +2622,8 @@ class Client
       return self if @chainAPIcalls
       @HTML
     end
-    
-   # API_GetRecordAsHTML, using the active table id. 
+
+   # API_GetRecordAsHTML, using the active table id.
    def _getRecordAsHTML( rid, jht = nil, dfid = nil ) getRecordAsHTML( @dbid, rid, jht, dfid ) end
 
    # API_GetRecordInfo
@@ -2647,34 +2648,34 @@ class Client
          return @num_fields,  @update_id, @field_data_list
       end
    end
-    
-   # API_GetRecordInfo, using the active table id. 
+
+   # API_GetRecordInfo, using the active table id.
    def _getRecordInfo( rid = @rid ) getRecordInfo( @dbid, rid ) end
-   
+
    # API_GetRoleInfo
    def getRoleInfo( dbid )
       @dbid = dbid
-      
+
       sendRequest( :getRoleInfo )
-      
+
       @roles = getResponseElement( :roles )
-      
+
       return self if @chainAPIcalls
-      
+
       if block_given?
         role_list = getResponseElements( "qdbapi/roles/role" )
         if role_list
           role_list.each {|role| yield role}
         else
           yield nil
-        end  
-      else  
+        end
+      else
          @roles
        end
-       
+
    end
-     
-   # API_GetRoleInfo, using the active table id. 
+
+   # API_GetRoleInfo, using the active table id.
    def _getRoleInfo() getRoleInfo( @dbid ) end
 
    # API_GetSchema
@@ -2707,8 +2708,8 @@ class Client
          @table
       end
     end
-    
-   # API_GetSchema, using the active table id. 
+
+   # API_GetSchema, using the active table id.
    def _getSchema() getSchema( @dbid ) end
 
    # API_obstatus: get the status of the QuickBase server.
@@ -2722,31 +2723,31 @@ class Client
      @serverUpdays = getResponseElement("updays")
      @serverStatus = {
      "version" => @serverVersion.text,
-     "users" => @serverUsers.text, 
-     "groups" => @serverGroups.text, 
-     "databases" => @serverDatabases.text, 
-     "uptime" => @serverUptime.text, 
-     "updays" => @serverUpdays.text 
-     } 
+     "users" => @serverUsers.text,
+     "groups" => @serverGroups.text,
+     "databases" => @serverDatabases.text,
+     "uptime" => @serverUptime.text,
+     "updays" => @serverUpdays.text
+     }
    end
-   
+
    # Get the status of the QuickBase server.
    def getServerStatus
      obStatus
-   end  
+   end
 
    # API_GetUserInfo
    def getUserInfo( email = nil )
      @email = email
-     
+
       if @email and @email.length > 0
-        xmlRequestData = toXML( :email, @email) 
+        xmlRequestData = toXML( :email, @email)
         sendRequest( :getUserInfo, xmlRequestData )
       else
         sendRequest( :getUserInfo )
         @login = getResponsePathValue( "user/login" )
-      end  
-      
+      end
+
       @name = getResponsePathValue( "user/name" )
       @firstName = getResponsePathValue( "user/firstName" )
       @lastName = getResponsePathValue( "user/lastName" )
@@ -2756,7 +2757,7 @@ class Client
       @externalAuth = getResponsePathValue( "user/externalAuth" )
       @user = getResponseElement( :user )
       @userid = @user.attributes["id"] if @user
-      
+
       return self if @chainAPIcalls
       @user
    end
@@ -2764,13 +2765,13 @@ class Client
    # API_GetUserRole
    def getUserRole( dbid, userid, inclgrps = nil )
       @dbid, @userid, @inclgrps = dbid, userid, inclgrps
-      
-      xmlRequestData = toXML( :userid , @userid ) 
-      xmlRequestData << toXML( :inclgrps , "1" ) if @inclgrps  
+
+      xmlRequestData = toXML( :userid , @userid )
+      xmlRequestData << toXML( :inclgrps , "1" ) if @inclgrps
       sendRequest( :getUserRole, xmlRequestData )
-      
+
       @user = getResponseElement( :user )
-      @userid = @user.attributes["id"] if @user 
+      @userid = @user.attributes["id"] if @user
       @username = getResponsePathValue("user/name")
       @role = getResponseElement( "user/roles/role" )
       @roleid = @role.attributes["id"] if @role
@@ -2781,14 +2782,14 @@ class Client
       member = getResponseElement("user/roles/role/member")
       @member_type = member.attributes["type"] if member
       @member = getResponsePathValue("user/roles/role/member") if member
-      
+
       return self if @chainAPIcalls
       return @user, @role
     end
-    
-   # API_GetUserRole, using the active table id. 
+
+   # API_GetUserRole, using the active table id.
    def _getUserRole( userid, inclgrps = nil ) getUserRole( @dbid, userid, inclgrps ) end
-   
+
    # API_GrantedDBs
    def grantedDBs( withembeddedtables = nil, excludeparents = nil, adminOnly = nil, includeancestors = nil, showAppData = nil )
 
@@ -2842,7 +2843,7 @@ class Client
       end
    end
 
-   # API_ImportFromCSV, using the active table id. 
+   # API_ImportFromCSV, using the active table id.
    def _importFromCSV( *args ) importFromCSV( @dbid, args ) end
 
    # API_InstallAppZip
@@ -2851,48 +2852,48 @@ class Client
      sendRequest( :installAppZip )
      return self if @chainAPIcalls
      @responseCode
-   end  
-   
+   end
+
    # API_ListDBPages
    def listDBPages(dbid)
       @dbid = dbid
-      
+
       sendRequest( :listDBPages )
-      
+
       @pages = getResponseValue( :pages )
       return self if @chainAPIcalls
       if block_given?
-        if @pages 
+        if @pages
            @pages.each{ |element| yield element }
         else
            yield nil
-        end  
+        end
       else
         @pages
-      end        
-    end  
-    
-   # API_ListDBPages, using the active table id. 
+      end
+    end
+
+   # API_ListDBPages, using the active table id.
    def _listDBPages() listDBPages(@dbid) end
-   
+
    # API_ProvisionUser
    def provisionUser( dbid, roleid, email, fname, lname )
-      @dbid, @roleid, @email, @fname, @lname = dbid, roleid, email, fname, lname 
-      
+      @dbid, @roleid, @email, @fname, @lname = dbid, roleid, email, fname, lname
+
       xmlRequestData = toXML( :roleid, @roleid)
       xmlRequestData << toXML( :email, @email )
       xmlRequestData << toXML( :fname, @fname )
       xmlRequestData << toXML( :lname, @lname )
-      
+
       sendRequest( :provisionUser, xmlRequestData )
-      
+
       @userid = getResponseValue( :userid )
-      
+
       return self if @chainAPIcalls
       @userid
-   end  
+   end
 
-   # API_ProvisionUser, using the active table id. 
+   # API_ProvisionUser, using the active table id.
    def _provisionUser( roleid, email, fname, lname ) provisionUser( @dbid, roleid, email, fname, lname ) end
 
    # API_PurgeRecords
@@ -2906,100 +2907,100 @@ class Client
       @num_records_deleted
    end
 
-   # API_PurgeRecords, using the active table id. 
+   # API_PurgeRecords, using the active table id.
    def _purgeRecords( query = nil, qid = nil, qname = nil ) purgeRecords( @dbid, query, qid, qname ) end
 
    # API_RemoveUserFromRole
    def removeUserFromRole( dbid, userid, roleid )
-      @dbid, @userid, @roleid = dbid, userid, roleid 
-      
+      @dbid, @userid, @roleid = dbid, userid, roleid
+
       xmlRequestData = toXML( :userid, @userid )
       xmlRequestData << toXML( :roleid, @roleid )
-      
+
       sendRequest( :removeUserFromRole, xmlRequestData )
-      
+
       return self if @chainAPIcalls
       @requestSucceeded
-   end  
+   end
 
-   # API_RemoveUserFromRole, using the active table id. 
+   # API_RemoveUserFromRole, using the active table id.
    def _removeUserFromRole( userid, roleid ) removeUserFromRole( @dbid, userid, roleid ) end
-     
+
    # API_RenameApp
    def renameApp( dbid, newappname )
-      @dbid, @newappname = dbid, newappname 
-      
+      @dbid, @newappname = dbid, newappname
+
       xmlRequestData = toXML( :newappname , @newappname )
-      
+
       sendRequest( :renameApp, xmlRequestData )
-      
+
       return self if @chainAPIcalls
       @requestSucceeded
-   end  
+   end
 
-   # API_RenameApp, using the active table id. 
+   # API_RenameApp, using the active table id.
    def _renameApp( newappname ) renameApp( @dbid, newappname ) end
 
    # API_RunImport
    def runImport( dbid, id )
       @dbid, @id = dbid, id
-      
+
       xmlRequestData = toXML( :id , @id )
-      
+
       sendRequest( :runImport, xmlRequestData )
-      
+
       return self if @chainAPIcalls
       @requestSucceeded
-   end  
+   end
 
-   # API_RunImport, using the active table id. 
+   # API_RunImport, using the active table id.
    def _runImport( id ) runImport( @dbid, id ) end
 
    # API_SendInvitation
    def sendInvitation( dbid, userid, usertext = "Welcome to my application!" )
-      @dbid, @userid, @usertext = dbid, userid, usertext 
-      
+      @dbid, @userid, @usertext = dbid, userid, usertext
+
       xmlRequestData = toXML( :userid, @userid )
       xmlRequestData << toXML( :usertext, @usertext )
-      
+
       sendRequest( :sendInvitation, xmlRequestData )
-      
+
       return self if @chainAPIcalls
       @requestSucceeded
-   end  
+   end
 
-   # API_SendInvitation, using the active table id. 
+   # API_SendInvitation, using the active table id.
    def _sendInvitation( userid, usertext = "Welcome to my application!" ) sendInvitation( @dbid, userid, usertext ) end
 
    # API_SetAppData
    def setAppData( dbid, appdata )
-      @dbid, @appdata = dbid, appdata 
+      @dbid, @appdata = dbid, appdata
 
       xmlRequestData = toXML( :appdata , @appdata )
-      
+
       sendRequest( :setAppData )
-     
+
       return self if @chainAPIcalls
       @appdata
-   end  
+   end
 
-   # API_SetAppData, using the active table id. 
+   # API_SetAppData, using the active table id.
    def _setAppData( appdata ) setAppData( @dbid, appdata ) end
 
    # API_SetDBvar
    def setDBvar( dbid, varname, value )
-      @dbid, @varname, @value = dbid, varname, value 
-      
+      @dbid, @varname, @value = dbid, varname, value
+
       xmlRequestData = toXML( :varname, @varname )
       xmlRequestData << toXML( :value, @value )
-      
+
       sendRequest( :setDBvar, xmlRequestData )
-      
+
       return self if @chainAPIcalls
       @requestSucceeded
-   end  
+   end
 
-   # API_SetDBvar, using the active table id. 
+   # API_SetDBvar, using the active table id.
    def _setDBvar( varname, value ) setDBvar( @dbid, varname, value ) end
 
    # API_SetFieldProperties
@@ -3027,21 +3028,21 @@ class Client
       return self if @chainAPIcalls
       @requestSucceeded
    end
-   
-   # API_SetFieldProperties, using the active table id. 
+
+   # API_SetFieldProperties, using the active table id.
    def _setFieldProperties( properties, fid ) setFieldProperties( @dbid, properties, fid ) end
 
    # API_SetKeyField
    def setKeyField( dbid, fid )
       @dbid, @fid = dbid, fid
-      
+
       xmlRequestData = toXML( :fid, @fid )
-      
+
       sendRequest( :setKeyField, xmlRequestData )
-      
+
       return self if @chainAPIcalls
       @requestSucceeded
-   end  
+   end
 
    # API_SetKeyField, using the active table id.
    def _setKeyField(fid) setKeyField( @dbid, fid ) end
@@ -3054,39 +3055,39 @@ class Client
       return self if @chainAPIcalls
       @requestSucceeded
     end
-    
+
    # -----------------------------------------------------------------------------------
    # NOTE: API_UploadFile
-   # To do the equivalent of API_UploadFile, use the updateFile method below. 
+   # To do the equivalent of API_UploadFile, use the updateFile method below.
    # -----------------------------------------------------------------------------------
    #def uploadFile( dbid, rid, uploadDataFileName )
    #end
    #def _uploadFile( rid, uploadDataFileName )
-     
+
    # API_UserRoles
    def userRoles( dbid )
       @dbid = dbid
-      
+
       sendRequest( :userRoles )
-      
+
       @users = getResponseElement( :users )
       return self if @chainAPIcalls
-      
+
       if block_given?
         if @users
           user_list = getResponseElements("qdbapi/users/user")
           user_list.each{|user| yield user}
         else
           yield nil
-        end          
+        end
       else
-        @users        
+        @users
       end
    end
-   
-   # API_UserRoles, using the active table id. 
+
+   # API_UserRoles, using the active table id.
    def _userRoles() userRoles( @dbid ) end
-    
+
    # ------------------- End of API_ wrapper methods -----------------------------------------
    # -----------------------------------------------------------------------------------------------
 
@@ -3094,7 +3095,7 @@ class Client
    # These methods are focused on reducing the amount of code you
    # have to write to get stuff done using the QuickBase::Client.
    # -----------------------------------------------------------------------------------------------
-   
+
    # Use this if you aren't sure whether a particular record already exists or not
    def addOrEditRecord( dbid, fvlist, rid = nil, disprec = nil, fform = nil, ignoreError = nil, update_id = nil, key = nil  )
       if rid or key
@@ -3103,11 +3104,11 @@ class Client
           addRecord( dbid, fvlist, disprec, fform, ignoreError, update_id )
         end
         record
-      else    
+      else
         addRecord( dbid, fvlist, disprec, fform, ignoreError, update_id )
-      end  
-    end  
-    
+      end
+    end
+
    # Get a record as a Hash, using the record id and dbid .
    # e.g. getRecord("24105","8emtadvk"){|myRecord| p myRecord}
    def getRecord(rid, dbid = @dbid, fieldNames = nil)
@@ -3117,10 +3118,10 @@ class Client
       if block_given?
         yield rec
       else
-        rec  
-      end        
-    end     
-    
+        rec
+      end
+    end
+
    # Get an array of records as Hashes, using the record ids and dbid .
    # e.g. getRecords(["24105","24107"],"8emtadvk"){|myRecord| p myRecord}
    def getRecords(rids, dbid = @dbid, fieldNames = nil)
@@ -3128,21 +3129,21 @@ class Client
       if rids.length > 0
         query = ""
         rids.each{|rid| query << "{'3'.EX.'#{rid}'}OR"}
-        query[-2] = "" 
+        query[-2] = ""
         fieldNames ||= getFieldNames(dbid)
         iterateRecords(dbid,fieldNames,query){|r| records << r }
       end
       if block_given?
         records.each{|rec|yield rec}
       else
-        records  
-      end        
-   end     
-    
+        records
+      end
+   end
+
    # Loop through the list of Pages for an application
     def iterateDBPages(dbid)
         listDBPages(dbid){|page|
-             if page.is_a?( REXML::Element) and page.name == "page" 
+             if page.is_a?( REXML::Element) and page.name == "page"
                 @pageid = page.attributes["id"]
                 @pagetype = page.attributes["type"]
                 @pagename = page.text if page.has_text?
@@ -3158,8 +3159,8 @@ class Client
        iterateDBPages(dbid){|page| dbPagesArray << page }
        dbPagesArray
      end
-     
-    alias getDBPages getDBPagesAsArray 
+
+    alias getDBPages getDBPagesAsArray
 
    #   - creates a QuickBase::Client,
    #   - signs into QuickBase
@@ -3168,7 +3169,7 @@ class Client
    #   - signs out of QuickBase
    #
    #   e.g. QuickBase::Client.processDatabase( "user", "password", "my DB" ) { |qbClient,dbid| qbClient.getDBInfo( dbid ) }
-   
+
    def Client.processDatabase( username, password, appname, chainAPIcalls = nil )
       if username and password and appname and block_given?
          begin
@@ -3193,7 +3194,7 @@ class Client
    #                                           .addField( @dbid, "a choice field", "text" )
    #                                           .fieldAddChoices( @dbid, @fid, %w{ one two three four five } )
    #                                      }
-   
+
    def chainAPIcallsBlock
       if block_given?
          @chainAPIcalls = true
@@ -3348,22 +3349,22 @@ class Client
    # The results are returned in Hash, e.g. { "Name" => values[ "Name" ], "Phone" => values[ "Phone" ] }
    # The parameters after 'fieldNames' are passed directly to the doQuery() API_ call.
    #
-   #  Invalid 'fieldNames' will be treated as field IDs by default,  e.g. getAllValuesForFields( "dhnju5y7", [ "3" ] ) 
+   #  Invalid 'fieldNames' will be treated as field IDs by default,  e.g. getAllValuesForFields( "dhnju5y7", [ "3" ] )
    #  returns a list of Record ID#s even if the 'Record ID#' field name has been changed.
-   
+
    def getAllValuesForFields( dbid, fieldNames = nil, query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil )
       if dbid
 
          getSchema(dbid)
-         
+
          values = {}
          fieldIDs = {}
          if fieldNames and fieldNames.is_a?( String )
             values[ fieldNames ] = []
             fieldID = lookupFieldIDByName( fieldNames )
-            if fieldID 
-               fieldIDs[ fieldNames ] = fieldID 
-            elsif fieldNames.match(/[0-9]+/) # assume fieldNames is a field ID  
+            if fieldID
+               fieldIDs[ fieldNames ] = fieldID
+            elsif fieldNames.match(/[0-9]+/) # assume fieldNames is a field ID
                fieldIDs[ fieldNames ] = fieldNames
             end
          elsif fieldNames and fieldNames.is_a?( Array )
@@ -3372,7 +3373,7 @@ class Client
                   values[ name ] = []
                   fieldID = lookupFieldIDByName( name )
                   if fieldID
-                     fieldIDs[ fieldID ] = name 
+                     fieldIDs[ fieldID ] = name
                   elsif name.match(/[0-9]+/) # assume name is a field ID
                      fieldIDs[ name ] = name
                   end
@@ -3383,16 +3384,16 @@ class Client
                   values[ name ] = []
                   fieldID = lookupFieldIDByName( name )
                   fieldIDs[ fieldID ] = name
-            }         
+            }
          end
-         
+
          if clist
             clist << "."
             clist = fieldIDs.keys.join('.')
          elsif qid.nil? and qname.nil?
             clist = fieldIDs.keys.join('.')
          end
-         
+
          if clist
             clist = clist.split('.')
             clist.uniq!
@@ -3426,23 +3427,23 @@ class Client
          values
       end
     end
-    
+
   alias getRecordsHash getAllValuesForFields
-   
+
    # Get all the values for one or more fields from a specified table.
    # This also formats the field values instead of returning the raw value.
    def getAllValuesForFieldsAsArray( dbid, fieldNames = nil, query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil )
       ret = []
       valuesForFields = getAllValuesForFields(dbid, fieldNames, query, qid, qname, clist, slist,fmt,options)
       if valuesForFields
-         fieldNames ||= getFieldNames(@dbid) 
+         fieldNames ||= getFieldNames(@dbid)
          if fieldNames and fieldNames[0]
-            ret = Array.new(valuesForFields[fieldNames[0]].length) 
+            ret = Array.new(valuesForFields[fieldNames[0]].length)
             fieldType = {}
             fieldNames.each{|field|fieldType[field]=lookupFieldTypeByName(field)}
             valuesForFields.each{ |field,values|
-               values.each_index { |i| 
-                  ret[i] ||= {} 
+               values.each_index { |i|
+                  ret[i] ||= {}
                   ret[i][field]=formatFieldValue(values[i],fieldType[field])
                }
             }
@@ -3450,7 +3451,7 @@ class Client
       end
       ret
    end
-  
+
   alias getRecordsArray getAllValuesForFieldsAsArray
 
    # Get all the values for one or more fields from a specified table, in JSON format.
@@ -3468,7 +3469,7 @@ class Client
      ret = getAllValuesForFieldsAsArray(dbid,fieldNames,query,qid,qname,clist,slist,fmt,options)
      ret = JSON.pretty_generate(ret) if ret
    end
-   
+
    alias getRecordsAsPrettyJSON getAllValuesForFieldsAsPrettyJSON
 
    # Set the values of fields in all records returned by a query.
@@ -3484,18 +3485,18 @@ class Client
                @rid = recordIDs["3"][i]
                setFieldValues(fieldValuesToSet)
                edited_rids << @rid
-            }   
+            }
          end
       else
          raise "'fieldValuesToSet' must be a Hash of field names and values."
       end
-      edited_rids 
+      edited_rids
    end
-   
+
    # Loop through records returned from a query. Each record is a field+value Hash.
    # e.g. iterateRecords( "dhnju5y7", ["Name","Address"] ) { |values| puts values["Name"], values["Address"] }
    def iterateRecords( dbid, fieldNames, query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil )
-      if block_given?   
+      if block_given?
          queryResults = getAllValuesForFields(dbid,fieldNames,query,qid,qname,clist,slist,fmt,options)
          if queryResults
             numRecords = 0
@@ -3512,7 +3513,7 @@ class Client
          raise "'iterateRecords' must be called with a block."
       end
    end
-   
+
    # Same as iterateRecords but with fields optionally filtered by Ruby regular expressions.
    # e.g. iterateFilteredRecords( "dhnju5y7", [{"Name" => "[A-E].+"},"Address"] ) { |values| puts values["Name"], values["Address"] }
    def iterateFilteredRecords( dbid, fieldNames, query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil )
@@ -3531,9 +3532,9 @@ class Client
          if regexp
             match = true
             fields.each{|field|
-               if regexp[field] 
+               if regexp[field]
                   unless record[field] and record[field].match(regexp[field])
-                     match = false 
+                     match = false
                      break
                   end
                end
@@ -3548,32 +3549,32 @@ class Client
    # e.g. getFilteredRecords( "dhnju5y7", [{"Name" => "[A-E].+"},"Address"] ) { |values| puts values["Name"], values["Address"] }
    def getFilteredRecords( dbid, fieldNames, query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil )
       filteredRecords = []
-      iterateFilteredRecords(dbid, fieldNames, query, qid, qname, clist, slist, fmt, options){ |filteredRecord| 
-         filteredRecords << filteredRecord 
+      iterateFilteredRecords(dbid, fieldNames, query, qid, qname, clist, slist, fmt, options){ |filteredRecord|
+         filteredRecords << filteredRecord
       }
       filteredRecords
    end
-    
+
    alias findRecords getFilteredRecords
    alias find_records getFilteredRecords
 
-   # Get records from two or more tables and/or queries with the same value in a 
+   # Get records from two or more tables and/or queries with the same value in a
    # 'join' field and loop through the joined results.
    # The 'joinfield' does not have to have the same name in each table.
-   # Fields with the same name in each table will be merged, with the value from the last 
+   # Fields with the same name in each table will be merged, with the value from the last
    # table being assigned. This is similar to an SQL JOIN.
    def iterateJoinRecords(tablesAndFields)
-   
-      raise "'iterateJoinRecords' must be called with a block." if not block_given?   
-   
+
+      raise "'iterateJoinRecords' must be called with a block." if not block_given?
+
       if tablesAndFields and tablesAndFields.is_a?(Array)
-         
+
          # get all the records from QuickBase that we might need - fewer API calls is faster than processing extra data
          tables = []
          numRecords = {}
          tableRecords = {}
          joinfield = {}
-         
+
          tablesAndFields.each{|tableAndFields|
             if tableAndFields and tableAndFields.is_a?(Hash)
                if tableAndFields["dbid"] and tableAndFields["fields"] and tableAndFields["joinfield"]
@@ -3590,7 +3591,7 @@ class Client
                                                                                                           tableAndFields["slist"],
                                                                                                           "structured",
                                                                                                           tableAndFields["options"])
-                     numRecords[tableAndFields["dbid"]] = tableRecords[tableAndFields["dbid"]][tableAndFields["fields"][0]].length                                                                                     
+                     numRecords[tableAndFields["dbid"]] = tableRecords[tableAndFields["dbid"]][tableAndFields["fields"][0]].length
                   else
                      raise "'tableAndFields[\"fields\"]' must be an Array of fields to retrieve."
                   end
@@ -3601,19 +3602,19 @@ class Client
                raise "'tableAndFields' must be a Hash"
             end
          }
-         
+
          numTables = tables.length
-         
+
          # go through the records in the first table
          (0..(numRecords[tables[0]]-1)).each{|i|
-         
+
             # get the value of the join field in each record of the first table
             joinfieldValue = tableRecords[tables[0]][joinfield[tables[0]]][i]
 
-            # save the other tables' record indices of records containing the joinfield value 
+            # save the other tables' record indices of records containing the joinfield value
             tableIndices = []
-            
-            (1..(numTables-1)).each{|tableNum| 
+
+            (1..(numTables-1)).each{|tableNum|
                tableIndices[tableNum] = []
                (0..(numRecords[tables[tableNum]]-1)).each{|j|
                   if joinfieldValue == tableRecords[tables[tableNum]][joinfield[tables[tableNum]]][j]
@@ -3621,26 +3622,26 @@ class Client
                   end
                }
             }
-            
+
             # if all the tables had at least one matching record, build a joined record and yield it
-            buildJoinRecord = true   
+            buildJoinRecord = true
             (1..(numTables-1)).each{|tableNum|
                buildJoinRecord = false if not tableIndices[tableNum].length > 0
             }
-            
+
             if buildJoinRecord
-            
+
                joinRecord = {}
-               
+
                tableRecords[tables[0]].each_key{|field|
                   joinRecord[field] = tableRecords[tables[0]][field][i]
                }
-               
+
                # nested loops for however many tables we have
                currentIndex = []
                numTables.times{ currentIndex << 0 }
                loop {
-                  (1..(numTables-1)).each{|tableNum|   
+                  (1..(numTables-1)).each{|tableNum|
                      index = tableIndices[tableNum][currentIndex[tableNum]]
                      tableRecords[tables[tableNum]].each_key{|field|
                         joinRecord[field] = tableRecords[tables[tableNum]][field][index]
@@ -3649,7 +3650,7 @@ class Client
                         currentIndex[tableNum] = -1
                      else
                         currentIndex[tableNum] += 1
-                     end   
+                     end
                      if tableNum == numTables-1
                         yield joinRecord
                      end
@@ -3666,25 +3667,25 @@ class Client
          raise "'tablesAndFields' must be Array of Hashes of table query parameters."
       end
    end
-   
+
    # Get an array of records from two or more tables and/or queries with the same value in a 'join' field.
    # The 'joinfield' does not have to have the same name in each table.
-   # Fields with the same name in each table will be merged, with the value from the last 
+   # Fields with the same name in each table will be merged, with the value from the last
    # table being assigned. This is similar to an SQL JOIN.
    def getJoinRecords(tablesAndFields)
       joinRecords = []
       iterateJoinRecords(tablesAndFields)  { |joinRecord|
          joinRecords << joinRecord.dup
-      } 
+      }
       joinRecords
    end
-   
+
    # Get values from the same fields in two or more tables and/or queries and loop through the merged results.
    # The merged records will be unique. This is similar to an SQL UNION.
    def iterateUnionRecords(tables,fieldNames)
-   
-      raise "'iterateUnionRecords' must be called with a block." if not block_given?   
-   
+
+      raise "'iterateUnionRecords' must be called with a block." if not block_given?
+
       if tables and tables.is_a?(Array)
          if fieldNames and fieldNames.is_a?(Array)
             tableRecords = []
@@ -3732,122 +3733,122 @@ class Client
    # The merged records will be unique. This is similar to an SQL UNION.
    def getUnionRecords(tables,fieldNames)
       unionRecords = []
-      iterateUnionRecords(tables,fieldNames) { |unionRecord| 
-         unionRecords << unionRecord.dup 
+      iterateUnionRecords(tables,fieldNames) { |unionRecord|
+         unionRecords << unionRecord.dup
       }
       unionRecords
    end
 
-   # (The QuickBase API does not supply a method for this.) 
+   # (The QuickBase API does not supply a method for this.)
    # Loop through summary records, like the records in a QuickBase Summary report.
    # Fields with 'Total' and 'Average' checked in the target table will be summed and/or averaged.
    # Other fields with duplicate values will be merged into a single 'record'.
    # The results will be sorted by the merged fields, in ascending order.
-   # e.g. -  
-   #    iterateSummaryRecords( "vavaa4sdd", ["Customer", "Amount"] ) {|record| 
+   # e.g. -
+   #    iterateSummaryRecords( "vavaa4sdd", ["Customer", "Amount"] ) {|record|
    #        puts "Customer: #{record['Customer']}, Amount #{record['Amount']}
-   #    } 
+   #    }
    # would print the total Amount for each Customer, sorted by Customer.
    def iterateSummaryRecords( dbid, fieldNames,query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil )
-   
+
       getSchema(dbid)
-      
+
       slist = ""
       summaryRecord = {}
       doesTotal = {}
       doesAverage = {}
       summaryField = {}
       fieldType = {}
-      
+
       fieldNames.each{ |fieldName|
          fieldType[fieldName] = lookupFieldTypeByName(fieldName)
-         isSummaryField = true     
+         isSummaryField = true
          doesTotal[fieldName] = isTotalField?(fieldName)
          doesAverage[fieldName] = isAverageField?(fieldName)
-         if doesTotal[fieldName] 
-            summaryRecord["#{fieldName}:Total"] = 0 
+         if doesTotal[fieldName]
+            summaryRecord["#{fieldName}:Total"] = 0
             isSummaryField = false
-         end   
-         if doesAverage[fieldName] 
-            summaryRecord["#{fieldName}:Average"] = 0 
+         end
+         if doesAverage[fieldName]
+            summaryRecord["#{fieldName}:Average"] = 0
             isSummaryField = false
          end
          if isSummaryField
             summaryField[fieldName] = true
-            fieldID = lookupFieldIDByName(fieldName)  
+            fieldID = lookupFieldIDByName(fieldName)
             slist << "#{fieldID}."
          end
       }
       slist[-1] = ""
-      
+
       count = 0
-      
+
       iterateRecords( dbid, fieldNames, query, qid, qname, clist, slist, fmt, options) { |record|
-         
+
          summaryFieldValuesHaveChanged = false
-         fieldNames.each{ |fieldName| 
-            if summaryField[fieldName] and record[fieldName] != summaryRecord[fieldName]   
+         fieldNames.each{ |fieldName|
+            if summaryField[fieldName] and record[fieldName] != summaryRecord[fieldName]
                summaryFieldValuesHaveChanged = true
                break
             end
          }
 
          if summaryFieldValuesHaveChanged
-         
+
             summaryRecord["Count"] = count
-            fieldNames.each{|fieldName| 
-               if doesTotal[fieldName] 
-                  summaryRecord["#{fieldName}:Total"] = formatFieldValue(summaryRecord["#{fieldName}:Total"],fieldType[fieldName]) 
-               end   
+            fieldNames.each{|fieldName|
+               if doesTotal[fieldName]
+                  summaryRecord["#{fieldName}:Total"] = formatFieldValue(summaryRecord["#{fieldName}:Total"],fieldType[fieldName])
+               end
                if doesAverage[fieldName]
                   summaryRecord["#{fieldName}:Average"] = summaryRecord["#{fieldName}:Average"]/count if count > 0
                   summaryRecord["#{fieldName}:Average"] = formatFieldValue(summaryRecord["#{fieldName}:Average"],fieldType[fieldName])
-               end   
+               end
             }
-            
-            yield summaryRecord 
-            
+
+            yield summaryRecord
+
             count=0
             summaryRecord = {}
-            fieldNames.each{|fieldName| 
-               if doesTotal[fieldName] 
-                  summaryRecord["#{fieldName}:Total"] = 0 
-               end   
-               if doesAverage[fieldName] 
-                  summaryRecord["#{fieldName}:Average"] = 0 
-               end   
+            fieldNames.each{|fieldName|
+               if doesTotal[fieldName]
+                  summaryRecord["#{fieldName}:Total"] = 0
+               end
+               if doesAverage[fieldName]
+                  summaryRecord["#{fieldName}:Average"] = 0
+               end
             }
          end
-         
+
          count += 1
-         fieldNames.each{|fieldName| 
-               if doesTotal[fieldName] 
-                  summaryRecord["#{fieldName}:Total"] += record[fieldName].to_i 
+         fieldNames.each{|fieldName|
+               if doesTotal[fieldName]
+                  summaryRecord["#{fieldName}:Total"] += record[fieldName].to_i
                end
-               if doesAverage[fieldName] 
-                  summaryRecord["#{fieldName}:Average"] += record[fieldName].to_i 
+               if doesAverage[fieldName]
+                  summaryRecord["#{fieldName}:Average"] += record[fieldName].to_i
                end
-               if summaryField[fieldName]               
+               if summaryField[fieldName]
                   summaryRecord[fieldName] = record[fieldName]
-               end   
+               end
          }
       }
-      
+
       summaryRecord["Count"] = count
-      fieldNames.each{|fieldName| 
-         if doesTotal[fieldName] 
-            summaryRecord["#{fieldName}:Total"] = formatFieldValue(summaryRecord["#{fieldName}:Total"],fieldType[fieldName]) 
-         end   
-         if doesAverage[fieldName] 
+      fieldNames.each{|fieldName|
+         if doesTotal[fieldName]
+            summaryRecord["#{fieldName}:Total"] = formatFieldValue(summaryRecord["#{fieldName}:Total"],fieldType[fieldName])
+         end
+         if doesAverage[fieldName]
             summaryRecord["#{fieldName}:Average"] = summaryRecord["#{fieldName}:Average"]/count
             summaryRecord["#{fieldName}:Average"] = formatFieldValue(summaryRecord["#{fieldName}:Average"],fieldType[fieldName])
-         end   
+         end
       }
-      yield summaryRecord 
-   
+      yield summaryRecord
+
    end
 
-   # Collect summary records into an array. 
+   # Collect summary records into an array.
    def getSummaryRecords( dbid, fieldNames,query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil )
       summaryRecords = []
       iterateSummaryRecords(dbid, fieldNames,query, qid, qname, clist, slist, fmt = "structured", options){|summaryRecord|
@@ -3856,7 +3857,7 @@ class Client
       summaryRecords
    end
 
-   # Loop through a list of records returned from a query. 
+   # Loop through a list of records returned from a query.
    # Each record will contain all the fields with values formatted for readability by QuickBase via API_GetRecordInfo.
   def iterateRecordInfos(dbid, query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil)
       getSchema(dbid)
@@ -3867,10 +3868,10 @@ class Client
       iterateRecords(dbid, [recordIDFieldName], query, qid, qname, clist, slist, fmt, options){|r|
         getRecordInfo(dbid,r[recordIDFieldName])
         fieldValues = {}
-        fieldIDs.each{|k,v| 
+        fieldIDs.each{|k,v|
           fieldValues[k] = getFieldDataPrintableValue(v)
           fieldValues[k] ||= getFieldDataValue(v)
-        }        
+        }
         yield fieldValues
       }
   end
@@ -3890,7 +3891,7 @@ class Client
     tableName = nil
     tableDbid = nil
     requestType = ""
-    
+
     requestParts.each_index{|i|
       if i == 0
         dbid = findDBByName(requestParts[0].dup)
@@ -3903,7 +3904,7 @@ class Client
           tableName = getTableName(tableDbid)
           ret = "table:#{tableName}"
         else
-          ret = "Unable to process '#{requestParts[0].dup}' part of '#{requestString}'." 
+          ret = "Unable to process '#{requestParts[0].dup}' part of '#{requestString}'."
         end
       elsif i == 1
         if applicationDbid
@@ -3916,17 +3917,17 @@ class Client
             getSchema(applicationDbid.dup)
             tableDbid = lookupChdbid(applicationName.dup)
             if tableDbid # app+appchdbid/
-              tableName = applicationName 
+              tableName = applicationName
               ret, requestType = processRESTFieldNameOrRecordKeyRequest(tableDbid,requestParts[1].dup)
             else
-              ret = "Unable to process '#{requestParts[1].dup}' part of '#{requestString}'." 
-            end  
+              ret = "Unable to process '#{requestParts[1].dup}' part of '#{requestString}'."
+            end
           end
         elsif tableDbid
           ret, requestType = processRESTFieldNameOrRecordKeyRequest(tableDbid,requestParts[1].dup)
         else
-          ret = "Unable to process '#{requestParts[1].dup}' part of '#{requestString}'." 
-        end        
+          ret = "Unable to process '#{requestParts[1].dup}' part of '#{requestString}'."
+        end
       elsif (i==2 or i == 3) and ["keyFieldValue","recordID"].include?(requestType)
         fieldValues = ret.split(/\n/)
         fieldValues.each{|fieldValue|
@@ -3938,11 +3939,11 @@ class Client
       elsif i == 2 and tableDbid
         ret, requestType = processRESTFieldNameOrRecordKeyRequest(tableDbid,requestParts[2].dup)
       else
-        ret = "Unable to process '#{requestString}'." 
-      end  
+        ret = "Unable to process '#{requestString}'."
+      end
     }
     ret
-  end  
+  end
 
   def processRESTFieldNameOrRecordKeyRequest(dbid,fieldNameOrRecordKey)
     returnvalue = ""
@@ -3951,7 +3952,7 @@ class Client
     fieldNames = getFieldNames
     if fieldNames.include?(fieldNameOrRecordKey) # name of a field in the table
       requestType = "fieldName"
-      iterateRecordInfos(dbid){|r| 
+      iterateRecordInfos(dbid){|r|
          returnvalue << "#{fieldNameOrRecordKey}:#{r[fieldNameOrRecordKey]}\n" if r
       }
     elsif @key_fid # key field value
@@ -3987,9 +3988,9 @@ class Client
             if value
                baseFieldType = lookupBaseFieldTypeByName(field)
                case baseFieldType
-                  when "int32","int64","bool" 
+                  when "int32","int64","bool"
                      value = record[field].to_i
-                  when "float"   
+                  when "float"
                      value = record[field].to_f
                end
             end
@@ -4014,9 +4015,9 @@ class Client
             if value
                baseFieldType = lookupBaseFieldTypeByName(field)
                case baseFieldType
-                  when "int32","int64","bool" 
+                  when "int32","int64","bool"
                      value = record[field].to_i
-                  when "float"   
+                  when "float"
                      value = record[field].to_f
                end
             end
@@ -4059,12 +4060,12 @@ class Client
             if value
                baseFieldType = lookupBaseFieldTypeByName(field)
                case baseFieldType
-                  when "int32","int64","bool" 
+                  when "int32","int64","bool"
                      value = record[field].to_i
-                  when "float"   
+                  when "float"
                      value = record[field].to_f
                end
-               if sum[field].nil? 
+               if sum[field].nil?
                   sum[field] = value
                else
                   sum[field] = sum[field] + value
@@ -4076,7 +4077,7 @@ class Client
       sum = nil if not hasValues
       sum
    end
-   
+
    # Returns the average of the values for one or more fields in the records returned by a query.
    # e.g. averagesHash = average("dfdfafff",["Date Sent","Quantity","Part Name"])
    def average( dbid, fieldNames, query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil )
@@ -4089,9 +4090,9 @@ class Client
             if value
                baseFieldType = lookupBaseFieldTypeByName(field)
                case baseFieldType
-                  when "int32","int64","bool" 
+                  when "int32","int64","bool"
                      value = record[field].to_i
-                  when "float"   
+                  when "float"
                      value = record[field].to_f
                end
                if sum[field].nil?
@@ -4105,9 +4106,9 @@ class Client
       }
       average = {}
       hasValues = false
-      fieldNames.each{|field| 
+      fieldNames.each{|field|
          if sum[field] and count[field] > 0
-            average[field] = (sum[field]/count[field]) 
+            average[field] = (sum[field]/count[field])
             hasValues = true
          end
       }
@@ -4115,10 +4116,10 @@ class Client
       average
    end
 
-   # Query records, sum the values in a numeric field, calculate each record's percentage 
+   # Query records, sum the values in a numeric field, calculate each record's percentage
    # of the sum and put the percent in a percent field each record.
-   def applyPercentToRecords( dbid, numericField, percentField, 
-                                             query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil) 
+   def applyPercentToRecords( dbid, numericField, percentField,
+                                             query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil)
       fieldNames = Array[numericField]
       total = sum( dbid, fieldNames, query, qid, qname, clist, slist, fmt, options )
       fieldNames << "3" # Record ID#
@@ -4129,11 +4130,11 @@ class Client
          editRecord( dbid, record["3"], fvlist )
       }
    end
-   
+
    # Query records, get the average of the values in a numeric field, calculate each record's deviation
    # from the average and put the deviation in a percent field each record.
-   def applyDeviationToRecords( dbid, numericField, deviationField, 
-                                                query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil) 
+   def applyDeviationToRecords( dbid, numericField, deviationField,
+                                                query = nil, qid = nil, qname = nil, clist = nil, slist = nil, fmt = "structured", options = nil)
       fieldNames = Array[numericField]
       avg = average( dbid, fieldNames, query, qid, qname, clist, slist, fmt, options )
       fieldNames << "3" # Record ID#
@@ -4144,7 +4145,7 @@ class Client
          editRecord( dbid, record["3"], fvlist )
       }
    end
-   
+
    # Given an array of two numbers, return the second number as a percentage of the first number.
    def percent( inputValues )
       raise "'inputValues' must not be nil" if inputValues.nil?
@@ -4155,7 +4156,7 @@ class Client
       value = inputValues[1].to_f
       ((value/total)*100)
    end
-   
+
    # Given an array of two numbers, return the difference between the numbers as a positive number.
    def deviation( inputValues )
       raise "'inputValues' must not be nil" if inputValues.nil?
@@ -4186,7 +4187,7 @@ class Client
          processChildElements(field,true,choicesProc)
          choices = nil if choices.length == 0
          choices
-      else   
+      else
          nil
       end
    end
@@ -4216,7 +4217,7 @@ class Client
       end
    end
 
-   # Finds records with the same values in a specified list of fields.  
+   # Finds records with the same values in a specified list of fields.
    # The field list may be a list of field IDs or a list of field names.
    # Returns a hash with the structure { "duplicated values" => [ rid, rid, ... ] }
    def findDuplicateRecordIDs(  fnames, fids, dbid = @dbid, ignoreCase = true )
@@ -4340,14 +4341,14 @@ class Client
             if lastDataRow <= 0
                lastDataRow = 1
                while worksheet.Range("#{firstColumn}#{lastDataRow}")['Value']
-                  lastDataRow += 1  
+                  lastDataRow += 1
                end
             end
-      
+
             if firstDataRow > 0 and lastDataRow >= firstDataRow
                rows = worksheet.Range("#{firstColumn}#{firstDataRow}:#{lastColumn}#{lastDataRow}")['Value']
             end
-      
+
             workbook.Close
             excel.Quit
 
@@ -4455,7 +4456,7 @@ class Client
                   return 0 if targetFieldIDs.length != targetFieldNames.length
                else
                   fieldValues = splitString( line, fieldSeparator )
-                  if !validateLines 
+                  if !validateLines
                      validLines[ linenum ] = fieldValues
                   elsif validateLines and fieldValues.length == targetFieldIDs.length
                      validLines[ linenum ] = fieldValues
@@ -4479,9 +4480,9 @@ class Client
                   }
                else
                   csvdata = ""
-                  validLines.each{ |line| 
-                     if line 
-                        csvdata << line.join( ',' ) 
+                  validLines.each{ |line|
+                     if line
+                        csvdata << line.join( ',' )
                         csvdata << "\n"
                      end
                   }
@@ -4499,8 +4500,8 @@ class Client
    # Specify a different separator in the second paramater.
    # Fields containing the separator will be double-quoted.
    #
-   # e.g. makeSVFile( "contacts.txt", "\t", nil ) 
-   # e.g. makeSVFile( "contacts.txt", ",", "dhnju5y7", nil, nil, "List Changes" ) 
+   # e.g. makeSVFile( "contacts.txt", "\t", nil )
+   # e.g. makeSVFile( "contacts.txt", ",", "dhnju5y7", nil, nil, "List Changes" )
    def makeSVFile( filename, fieldSeparator = ",", dbid = @dbid, query = nil, qid = nil, qname = nil )
       File.open( filename, "w" ) { |file|
 
@@ -4557,17 +4558,17 @@ class Client
          end
       }
    end
-    
+
    # Create a CSV file using the records for a Report.
    def makeCSVFileForReport(filename,dbid=@dbid,query=nil,qid=nil,qname=nil)
       csv = getCSVForReport(dbid,query,qid,qname)
       File.open(filename,"w"){|f|f.write(csv || "")}
    end
-   
+
    # Get the CSV data for a Report.
    def getCSVForReport(dbid,query=nil,qid=nil,qname=nil)
       genResultsTable(dbid,query,nil,nil,nil,nil,"csv",qid,qname)
-   end  
+   end
 
    # Upload a file into a new record in a table.
    # Additional field values can optionally be set.
@@ -4585,7 +4586,7 @@ class Client
       end
       nil
    end
-   
+
    # Add a File Attachment into a new record in a table, using a string containing the file contents.
    # Additional field values can optionally be set.
    # e.g. uploadFile( "dhnju5y7", "contacts.txt", "fred: 1-222-333-4444", "Contacts File", { "Notes" => "#{Time.now}" }
@@ -4602,7 +4603,7 @@ class Client
       end
       nil
    end
-   
+
    # Upload a file into a new record in the active table.
    # e.g. uploadFile( "contacts.txt", "Contacts File" )
    def _uploadFile( filename, fileAttachmentFieldName )
@@ -4630,29 +4631,29 @@ class Client
       end
       nil
    end
-   
+
    # Update the file attachment in an existing record in the active record in the active table.
    # e.g. _updateFile( "contacts.txt", "Contacts File" )
    def _updateFile( filename, fileAttachmentFieldName )
       updateFile( @dbid, @rid, filename, fileAttachmentFieldName )
    end
-   
+
    # Remove the file from a File Attachment field in an existing record.
    # e.g. removeFileAttachment( "bdxxxibz4", "6", "Document" )
    def removeFileAttachment( dbid, rid , fileAttachmentFieldName )
       updateFile( dbid, rid, "delete", fileAttachmentFieldName )
-   end  
-   
+   end
+
    # Remove the file from a File Attachment field in an existing record in the active table
    # e.g. _removeFileAttachment( "6", "Document" )
    def _removeFileAttachment( rid , fileAttachmentFieldName )
       updateFile( @dbid, rid, "delete", fileAttachmentFieldName )
-   end  
+   end
 
    # Translate a simple SQL SELECT statement to a QuickBase query and run it.
-   # 
+   #
    #  If any supplied field names are numeric, they will be treated as QuickBase field IDs if
-   #  they aren't valid field names. 
+   #  they aren't valid field names.
    #
    # * e.g. doSQLQuery( "SELECT FirstName,Salary FROM Contacts WHERE LastName = "Doe" ORDER BY FirstName )
    # * e.g. doSQLQuery( "SELECT * FROM Books WHERE Author = "Freud" )
@@ -4679,7 +4680,7 @@ class Client
       query = "{'["
       queryState = "getFieldName"
       queryField = ""
-      
+
       sql.split(' ').each{ |token|
          case token
             when "SELECT" then state = "getColumns";next
@@ -4728,7 +4729,7 @@ class Client
                if fieldValue[-1] == "'"
                   fieldValue.gsub!("'","")
                   query << "#{fieldValue}"
-               else   
+               else
                   fieldValue.gsub!("'","")
                   query << "#{fieldValue} "
                end
@@ -4746,20 +4747,20 @@ class Client
          elsif state == "getLimit"
             limit = token.dup
             if options.nil?
-               options = "num-#{limit}" 
+               options = "num-#{limit}"
             else
                options << ".num-#{limit}"
             end
-         elsif state == "getOffset"   
+         elsif state == "getOffset"
             offset = token.dup
             if options.nil?
-               options = "skp-#{offset}" 
+               options = "skp-#{offset}"
             else
                options << ".skp-#{offset}"
             end
          end
       }
-      
+
       if dbname and @dbid.nil?
          dbid = findDBByname( dbname )
       else
@@ -4781,7 +4782,7 @@ class Client
                if fid.nil? and column.match(/[0-9]+/)
                   fid = column
                   columnNames << lookupFieldNameFromID(fid)
-               else   
+               else
                   columnNames << column
                end
                if fid
@@ -4800,7 +4801,7 @@ class Client
                if fid.nil?
                   fid = sortField if sortField.match(/[0-9]+/)
                end
-               if fid 
+               if fid
                   if slist
                      slist << ".#{fid}"
                   else
@@ -4822,7 +4823,7 @@ class Client
          else
             query = nil
          end
-         if getRecordCount 
+         if getRecordCount
             ret = getNumRecords(dbid)
          elsif returnOptions == :Hash
             ret = getAllValuesForFields(dbid, columnNames, query, nil, nil, clist, slist,"structured",options)
@@ -4834,36 +4835,36 @@ class Client
       end
       ret
    end
-   
+
    # Translate a simple SQL UPDATE statement to a QuickBase editRecord call.
    #
    # Note: This method is here primarily for Rails integration.
    # Note: This assumes, like SQL, that your column (i.e. field) names do not contain spaces.
    # Note: This assumes that Record ID# is the key field in your table.
    def doSQLUpdate(sqlString)
-   
+
       sql = sqlString.dup
       dbname = ""
       state = nil
       fieldName = ""
       fieldValue = ""
       sqlQuery = "SELECT 3 FROM "
-      
+
       clearFieldValuePairList
 
       sql.split(' ').each{ |token|
          case token
-            when "UPDATE" 
+            when "UPDATE"
                state = "getTable" unless state == "getFilter"
                next
-            when "SET" 
+            when "SET"
                state = "getFieldName"  unless state == "getFilter"
                next
-            when "=" 
+            when "="
                sqlQuery << " = " if state == "getFilter"
                state = "getFieldValue" unless state == "getFilter"
                next
-            when "WHERE" 
+            when "WHERE"
                sqlQuery << " WHERE "
                state = "getFilter"
                next
@@ -4871,9 +4872,9 @@ class Client
          if state == "getTable"
             dbname = token.dup
             sqlQuery << dbname
-         elsif state  == "getFieldName" 
+         elsif state  == "getFieldName"
             fieldName = token.gsub('[','').gsub(']','')
-         elsif state  == "getFieldValue" 
+         elsif state  == "getFieldValue"
             test = token
             if test[-1,1] == "'" or test[-2,2] == "',"
                fieldValue << token
@@ -4882,19 +4883,19 @@ class Client
                   fieldValue.gsub!("',","")
                end
                fieldValue.gsub!("'","")
-               if fieldName.length > 0 
+               if fieldName.length > 0
                   addFieldValuePair(fieldName,nil,nil,fieldValue)
                   fieldName = ""
                   fieldValue = ""
                end
-            else   
+            else
                fieldValue << "#{token} "
             end
-         elsif state == "getFilter"   
+         elsif state == "getFilter"
             sqlQuery << token
          end
       }
-      
+
       rows = doSQLQuery(sqlQuery,:Array)
       if rows and @dbid and @fvlist
          idFieldName = lookupFieldNameFromID("3")
@@ -4903,15 +4904,15 @@ class Client
             editRecord(@dbid,recordID,@fvlist) if recordID
          }
       end
-      
+
    end
-   
+
    # Translate a simple SQL INSERT statement to a QuickBase addRecord call.
    #
    # Note: This method is here primarily for Rails integration.
    # Note: This assumes, like SQL, that your column (i.e. field) names do not contain spaces.
    def doSQLInsert(sqlString)
-   
+
       sql = sqlString.dup
       dbname = ""
       state = nil
@@ -4920,32 +4921,32 @@ class Client
       fieldNames = []
       fieldValues = []
       index = 0
-      
+
       clearFieldValuePairList
-      
+
       sql.gsub!("("," ")
       sql.gsub!(")"," ")
 
       sql.split(' ').each{ |token|
          case token
-            when "INSERT", "INTO" 
+            when "INSERT", "INTO"
                state = "getTable"
                next
-            when "VALUES" 
+            when "VALUES"
                state = "getFieldValue"
                next
          end
          if state == "getTable"
             dbname = token.strip
             state =   "getFieldName"
-         elsif state  == "getFieldName" 
+         elsif state  == "getFieldName"
             fieldName = token.dup
             fieldName.gsub!("],","")
             fieldName.gsub!('[','')
             fieldName.gsub!(']','')
             fieldName.gsub!(',','')
             fieldNames << fieldName
-         elsif state  == "getFieldValue" 
+         elsif state  == "getFieldValue"
             test = token.dup
             if test[-1,1] == "'" or test[-2,2] == "',"
                fieldValue << token.dup
@@ -4953,7 +4954,7 @@ class Client
                   fieldValue.gsub!("',",'')
                end
                fieldValue.gsub!('\'','')
-               if fieldValue.length > 0 and fieldNames[index] 
+               if fieldValue.length > 0 and fieldNames[index]
                   addFieldValuePair(fieldNames[index],nil,nil,fieldValue)
                   fieldName = ""
                   fieldValue = ""
@@ -4969,7 +4970,7 @@ class Client
             end
          end
       }
-      
+
       if dbname and @dbid.nil?
          dbid = findDBByname( dbname )
       else
@@ -4980,11 +4981,11 @@ class Client
       recordid = nil
       if dbid
          recordid,updateid = addRecord(dbid,@fvlist)
-      end   
+      end
       recordid
-      
+
    end
-   
+
    # Iterate @records XML and yield only 'record' elements.
    def eachRecord( records = @records )
       if records and block_given?
@@ -4997,7 +4998,7 @@ class Client
       end
       nil
    end
-   
+
    # Iterate record XML and yield only 'f' elements.
    def eachField( record = @record )
       if record and block_given?
@@ -5008,16 +5009,16 @@ class Client
              end
          }
       end
-      nil      
+      nil
    end
-   
+
    # Log requests to QuickBase and responses from QuickBase in a file.
    # Useful for utilities that run unattended.
    def logToFile( filename )
       setLogger( Logger.new( filename ) )
    end
-    
-   # Add method aliases that follow the ruby method naming convention.   
+
+   # Add method aliases that follow the ruby method naming convention.
    # E.g. sendRequest will be aliased as send_request.
    def alias_methods
      aliased_methods = []
@@ -5136,40 +5137,40 @@ class REXML::Element
   attr_accessor :element_hash
 
   def method_missing(method_name,*method_args)
-    ret = nil 
+    ret = nil
     if elements
        if method_args and method_args.length > 0
           if method_args[0].length > 1
-             searchProc = proc { |e| 
+             searchProc = proc { |e|
                 if e.is_a?(REXML::Element) and e.name == method_name.to_s and e.attributes
                   if e.attributes[method_args[0][0].to_s] and e.attributes[method_args[0][0].to_s] == method_args[0][1].to_s
-                     ret = e 
+                     ret = e
                   end
-                end  
+                end
              }
-          else  
-             searchProc = proc { |e| 
+          else
+             searchProc = proc { |e|
                 if e.is_a?(REXML::Element) and e.name == method_name.to_s and e.attributes
                   if e.attributes["id"] and e.attributes["id"] == method_args[0][0].to_s
-                     ret = e 
+                     ret = e
                   end
                   if ret.nil? and e.attributes["name"] and e.attributes["name"] == method_args[0][0].to_s
                     ret = e
-                  end  
-                end  
+                  end
+                end
              }
-          end   
+          end
        else
-          searchProc = proc { |e| 
-             if e.is_a?(REXML::Element) and e.name == method_name.to_s 
-               ret = e 
-             end  
+          searchProc = proc { |e|
+             if e.is_a?(REXML::Element) and e.name == method_name.to_s
+               ret = e
+             end
           }
        end
-    end 
-    processChildElements( self, false, searchProc ) 
+    end
+    processChildElements( self, false, searchProc )
     if ret and !ret.has_elements? and ret.has_text?
-       ret = ret.text.dup 
+       ret = ret.text.dup
     end
     ret
   end
@@ -5178,7 +5179,7 @@ class REXML::Element
   # Sibling elements with duplicate names become Arrays.
   def to_h(include_element=proc{|e|true})
     to_hash_proc = proc {|e|
-       if e.is_a?(REXML::Element) and include_element.call(e)  
+       if e.is_a?(REXML::Element) and include_element.call(e)
          e.element_hash = {}
          e.element_hash["name"] = e.name
          if e.has_attributes?
@@ -5207,8 +5208,8 @@ class REXML::Element
     }
     processChildElements( self, false, to_hash_proc )
     element_hash
-  end  
-  
+  end
+
   def processChildElements( element, leafElementsOnly, block )
       if element
          if element.is_a?( Array )
@@ -5224,7 +5225,7 @@ class REXML::Element
             }
          end
        end
-  end   
+  end
 end
 
 
